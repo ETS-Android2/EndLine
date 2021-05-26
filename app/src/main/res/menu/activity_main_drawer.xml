@@ -16,5 +16,23 @@
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/menu_slideshow" />
+
+        <!-- Add Custom Menu-->
+        <item
+            android:id="@+id/nav_beauty"
+            android:icon="@drawable/ic_baseline_clean_hands_24"
+            android:title="@string/menu_beauty" />
+        <item
+            android:id="@+id/nav_food"
+            android:icon="@drawable/ic_baseline_food_bank_24"
+            android:title="@string/menu_food" />
+        <item
+            android:id="@+id/nav_health"
+            android:icon="@drawable/ic_baseline_nature_people_24"
+            android:title="@string/menu_health" />
+        <item
+            android:id="@+id/nav_medical"
+            android:icon="@drawable/ic_baseline_medical_services_24"
+            android:title="@string/menu_medical" />
     </group>
 </menu>
