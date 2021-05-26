@@ -23,6 +23,12 @@ public class ScanBarCode extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        Toast.makeText(this, "ISBN : " + result.getContents().toString(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "ISBN : " + result.getContents(), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        finish();
     }
 }
