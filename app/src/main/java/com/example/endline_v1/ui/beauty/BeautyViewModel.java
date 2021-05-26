@@ -10,7 +10,7 @@ public class BeautyViewModel extends ViewModel {
 
     public BeautyViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is gallery fragment");
+        mText.setValue("This is beauty fragment");
     }
 
     public LiveData<String> getText() {

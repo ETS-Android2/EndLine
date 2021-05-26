@@ -13,19 +13,18 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.endline_v1.R;
-import com.example.endline_v1.ui.gallery.GalleryViewModel;
 
 public class HealthFragment extends Fragment {
 
-    private GalleryViewModel galleryViewModel;
+    private HealthViewModel healthViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        galleryViewModel =
-                new ViewModelProvider(this).get(GalleryViewModel.class);
+        healthViewModel =
+                new ViewModelProvider(this).get(HealthViewModel.class);
         View root = inflater.inflate(R.layout.fragment_gallery, container, false);
         final TextView textView = root.findViewById(R.id.text_gallery);
-        galleryViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        healthViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

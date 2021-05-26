@@ -13,19 +13,18 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.endline_v1.R;
-import com.example.endline_v1.ui.gallery.GalleryViewModel;
 
 public class BeautyFragment extends Fragment {
 
-    private GalleryViewModel galleryViewModel;
+    private BeautyViewModel beautyViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        galleryViewModel =
-                new ViewModelProvider(this).get(GalleryViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_gallery, container, false);
-        final TextView textView = root.findViewById(R.id.text_gallery);
-        galleryViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        beautyViewModel =
+                new ViewModelProvider(this).get(BeautyViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_beauty, container, false);
+        final TextView textView = root.findViewById(R.id.text_beauty);
+        beautyViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
