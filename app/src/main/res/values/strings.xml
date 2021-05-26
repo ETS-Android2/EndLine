@@ -14,5 +14,6 @@
     <!-- Add Custom Menu-->
     <string name="menu_beauty">Beauty</string>
     <string name="menu_medical">Medical</string>
+    <string name="menu_food">Food</string>
     <string name="menu_health">Health</string>
 </resources>
