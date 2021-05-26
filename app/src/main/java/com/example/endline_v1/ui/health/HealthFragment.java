@@ -22,8 +22,8 @@ public class HealthFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         healthViewModel =
                 new ViewModelProvider(this).get(HealthViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_gallery, container, false);
-        final TextView textView = root.findViewById(R.id.text_gallery);
+        View root = inflater.inflate(R.layout.fragment_health, container, false);
+        final TextView textView = root.findViewById(R.id.text_health);
         healthViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
