@@ -52,7 +52,7 @@ public class LoadActivity extends AppCompatActivity {
             @Override
             public void run() {
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 finish();
             }
         }, 2000);
