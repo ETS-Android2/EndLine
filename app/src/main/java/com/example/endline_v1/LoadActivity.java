@@ -23,15 +23,26 @@ public class LoadActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_load);
 
+        handler = new Handler();
+
         PermissionListener permissionListener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
                 Toast.makeText(LoadActivity.this, "Granted Permission", Toast.LENGTH_SHORT).show();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                        finish();
+                    }
+                }, 2000);
             }
 
             @Override
             public void onPermissionDenied(List<String> deniedPermissions) {
                 Toast.makeText(LoadActivity.this, "Denied Permission", Toast.LENGTH_SHORT).show();
+                finish();
             }
         };
 
@@ -47,14 +58,6 @@ public class LoadActivity extends AppCompatActivity {
                         Manifest.permission.ACCESS_NETWORK_STATE)
                 .check();
 
-        handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                finish();
-            }
-        }, 2000);
+
     }
 }
