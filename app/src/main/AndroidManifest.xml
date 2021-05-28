@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.endline_v1">
-
     <!-- Related Internet Permission -->
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <!-- Related Camera Permission -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Related Camera Permission -->
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera2" />
 
-    <!-- Related Storage Permission -->
+    <uses-feature android:name="android.hardware.camera2" /> <!-- Related Storage Permission -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
@@ -21,6 +17,7 @@
         android:roundIcon="@mipmap/ic_launcher_endline_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.EndLine_v1">
+        <activity android:name=".LoginFormActivity"></activity>
         <activity
             android:name=".LoadActivity"
             android:label="@string/app_name"
@@ -32,8 +29,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".ScanBarCode" />
-        <activity android:name=".MainActivity"
-            android:theme="@style/Theme.EndLine_v1.NoActionBar"/>
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/Theme.EndLine_v1.NoActionBar" />
     </application>
 
 </manifest>
