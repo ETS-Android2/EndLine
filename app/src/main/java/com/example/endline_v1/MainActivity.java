@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     public void onComplete(@NonNull Task<AuthResult> task) {    //Check Login State
                         if(task.isSuccessful()){    //Login Success
                             Toast.makeText(MainActivity.this, "Success Login", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getApplicationContext(), ResultActivity.class);
+                            Intent intent = new Intent(getApplicationContext(), LoginFormActivity.class);
                             intent.putExtra("nickName", account.getDisplayName().toString());
                             intent.putExtra("photoUrl", String.valueOf(account.getPhotoUrl()));     //Change to String
                             startActivity(intent);      //Go to ResultActivity
