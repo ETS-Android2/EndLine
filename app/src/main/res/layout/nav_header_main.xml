@@ -13,7 +13,7 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <com.google.android.gms.common.SignInButton
-        android:id="@+id/signInBtn"
+        android:id="@+id/btn_google"
         android:layout_width="200dp"
         android:layout_height="wrap_content"/>
 
