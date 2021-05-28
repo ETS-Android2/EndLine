@@ -19,6 +19,10 @@
 
         <!-- Add Custom Menu-->
         <item
+            android:id="@+id/nav_login"
+            android:icon="@drawable/ic_baseline_login_24"
+            android:title="@string/menu_login" />
+        <item
             android:id="@+id/nav_beauty"
             android:icon="@drawable/ic_baseline_clean_hands_24"
             android:title="@string/menu_beauty" />
