@@ -117,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     public void onComplete(@NonNull Task<AuthResult> task) {    //Check Login State
                         if(task.isSuccessful()){    //Login Success
                             Toast.makeText(MainActivity.this, "Success Login", Toast.LENGTH_SHORT).show();
+                            btn_google.setVisibility(View.GONE);
                             tv_result = (TextView) findViewById(R.id.tv_id);
                             iv_profile = (ImageView) findViewById(R.id.iv_profile);
 
