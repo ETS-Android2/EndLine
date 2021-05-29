@@ -25,24 +25,29 @@
 
     <!-- Add Custom Fragment -->
     <fragment
+        android:id="@+id/nav_login"
+        android:name="com.example.endline_v1.ui.login.LoginFragment"
+        android:label="@string/menu_login"
+        tools:layout="@layout/fragment_login" />
+    <fragment
         android:id="@+id/nav_beauty"
         android:name="com.example.endline_v1.ui.beauty.BeautyFragment"
-        android:label="@string/menu_slideshow"
+        android:label="@string/menu_beauty"
         tools:layout="@layout/fragment_slideshow" />
     <fragment
         android:id="@+id/nav_food"
         android:name="com.example.endline_v1.ui.food.FoodFragment"
-        android:label="@string/menu_slideshow"
+        android:label="@string/menu_food"
         tools:layout="@layout/fragment_slideshow" />
     <fragment
         android:id="@+id/nav_health"
         android:name="com.example.endline_v1.ui.health.HealthFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:label="@string/menu_health"
+        tools:layout="@layout/fragment_health" />
     <fragment
         android:id="@+id/nav_medical"
         android:name="com.example.endline_v1.ui.medical.MedicalFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:label="@string/menu_medical"
+        tools:layout="@layout/fragment_medical" />
 
 </navigation>
