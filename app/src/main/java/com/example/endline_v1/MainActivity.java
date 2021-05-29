@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
 
+import com.google.android.gms.common.SignInButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
@@ -20,6 +21,7 @@ import androidx.appcompat.widget.Toolbar;
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+    private SignInButton btn_goolge;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,15 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        btn_goolge = navigationView.getHeaderView(0).findViewById(R.id.btn_google);
+        btn_goolge.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                
+            }
+        });
+
     }
 
     @Override
