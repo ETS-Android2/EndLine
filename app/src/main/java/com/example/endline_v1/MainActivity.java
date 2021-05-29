@@ -70,12 +70,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         auth = FirebaseAuth.getInstance();      //Get Auth Instance
 
-
         btn_google = navigationView.getHeaderView(0).findViewById(R.id.btn_google);
         btn_google.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);      //Go to Google Login Interface
+                startActivityForResult(intent, REQ_SIGN_GOOGLE);
             }
         });
 
