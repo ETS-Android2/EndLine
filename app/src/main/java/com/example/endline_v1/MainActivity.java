@@ -4,8 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -40,6 +43,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private FirebaseAuth auth;                          //Auth
     private GoogleApiClient googleApiClient;            //Google API Client
     private static final int REQ_SIGN_GOOGLE = 100;     //Result Code of Google Login
+
+    private TextView tv_result;     //User ID
+    private ImageView iv_profile;   //User Profile Photo
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,10 +117,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     public void onComplete(@NonNull Task<AuthResult> task) {    //Check Login State
                         if(task.isSuccessful()){    //Login Success
                             Toast.makeText(MainActivity.this, "Success Login", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getApplicationContext(), ResultActivity.class);
-                            intent.putExtra("nickName", account.getDisplayName().toString());
-                            intent.putExtra("photoUrl", String.valueOf(account.getPhotoUrl()));     //Change to String
-                            startActivity(intent);      //Go to ResultActivity
+                            tv_result = (TextView) findViewById(R.id.tv_id);
+                            iv_profile = (ImageView) findViewById(R.id.iv_profile);
+
+                            tv_result.setText(account.getDisplayName().toString());
+                            Glide.with(MainActivity.this).load(String.valueOf(account.getPhotoUrl())).into(iv_profile);
                         }else{  //Login Fail
                             Toast.makeText(MainActivity.this, "Fail Login", Toast.LENGTH_SHORT).show();
                         }
