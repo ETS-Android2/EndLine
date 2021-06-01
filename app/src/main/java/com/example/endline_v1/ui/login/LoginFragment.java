@@ -1,5 +1,6 @@
 package com.example.endline_v1.ui.login;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +20,20 @@ import com.example.endline_v1.R;
 
 public class LoginFragment extends Fragment {
 
+    MainActivity mainActivity;
     private LoginViewModel loginViewModel;
-    private Button btn_logout;
+    public Button btn_logout;
+
+    @Override
+    public void onAttach(@NonNull Activity activity) {
+        super.onAttach(activity);
+        mainActivity = (MainActivity) getActivity();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -39,7 +52,7 @@ public class LoginFragment extends Fragment {
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                mainActivity.OnFragmentChange(1);
                 Toast.makeText(getActivity(), "로그아웃되었습니다.", Toast.LENGTH_SHORT).show();
             }
         });
