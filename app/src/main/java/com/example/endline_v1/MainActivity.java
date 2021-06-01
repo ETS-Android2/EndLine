@@ -2,6 +2,7 @@ package com.example.endline_v1;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.widget.ImageView;
@@ -16,6 +17,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -109,11 +112,24 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             @Override
             public void onConnected(@Nullable Bundle bundle) {
                 auth.signOut();
+                Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(@NonNull Status status) {
+                        if (status.isSuccess()){
+                            Log.v("LogOut Event", "Success");
+                            Toast.makeText(getApplicationContext(), "로그아웃성공", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Log.v("LogOut Event", "Fail");
+                            Toast.makeText(getApplicationContext(), "로그아웃실패", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
 
             @Override
             public void onConnectionSuspended(int i) {
-
+                Log.v("LogOut Event", "Suspended");
             }
         });
 

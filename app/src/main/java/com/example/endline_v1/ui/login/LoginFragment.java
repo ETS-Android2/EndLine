@@ -53,7 +53,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mainActivity.OnFragmentChange(1);
-                Toast.makeText(getActivity(), "로그아웃되었습니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "로그아웃", Toast.LENGTH_SHORT).show();
             }
         });
 
