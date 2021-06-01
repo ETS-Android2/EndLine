@@ -118,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         if (status.isSuccess()){
                             Log.v("LogOut Event", "Success");
                             Toast.makeText(getApplicationContext(), "로그아웃성공", Toast.LENGTH_SHORT).show();
+                            resultLogout();
                         }
                         else{
                             Log.v("LogOut Event", "Fail");
@@ -167,6 +168,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         }
                     }
                 });
+    }
+
+    private void resultLogout(){
+        btn_google.setVisibility(View.VISIBLE);
+        tv_result = (TextView) findViewById(R.id.tv_id);
+        iv_profile = (ImageView) findViewById(R.id.iv_profile);
+
+        tv_result.setVisibility(View.GONE);
+        iv_profile.setVisibility(View.GONE);
+
+
     }
 
     @Override
