@@ -12,7 +12,7 @@
     <string name="menu_slideshow">Slideshow</string>
 
     <!-- Add Custom Menu-->
-    <string name="menu_login">Login</string>
+    <string name="menu_login">Logout</string>
     <string name="menu_beauty">Beauty</string>
     <string name="menu_medical">Medical</string>
     <string name="menu_food">Food</string>
