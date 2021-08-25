@@ -51,6 +51,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:19.0.0'   //Firebase Core
     implementation 'com.google.firebase:firebase-auth:21.0.1'   //Auth1
     implementation 'com.firebaseui:firebase-ui-auth:4.2.1'      //Auth2
+    implementation 'com.google.firebase:firebase-firestore:23.0.0'  //Firestore
 
     /* Glide Image Loading */
     implementation 'com.github.bumptech.glide:glide:4.9.0'
