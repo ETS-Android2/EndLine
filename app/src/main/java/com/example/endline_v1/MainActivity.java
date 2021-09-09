@@ -100,6 +100,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     }
 
+
+
     public void OnFragmentChange(int index){
         if(index == 1){
             signOut();
