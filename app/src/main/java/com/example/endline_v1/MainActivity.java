@@ -100,8 +100,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     }
 
-
-
     public void OnFragmentChange(int index){
         if(index == 1){
             signOut();
@@ -109,7 +107,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
     private void signOut() {
-
         googleApiClient.connect();
         googleApiClient.registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
             @Override
@@ -130,7 +127,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     }
                 });
             }
-
             @Override
             public void onConnectionSuspended(int i) {
                 Log.v("LogOut Event", "Suspended");
@@ -180,8 +176,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         tv_result.setVisibility(View.GONE);
         iv_profile.setVisibility(View.GONE);
-
-
     }
 
     @Override
