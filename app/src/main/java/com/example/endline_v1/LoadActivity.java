@@ -28,7 +28,7 @@ public class LoadActivity extends AppCompatActivity {
         PermissionListener permissionListener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
-                Toast.makeText(LoadActivity.this, "Granted Permission", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoadActivity.this, "권한 승인", Toast.LENGTH_SHORT).show();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -41,7 +41,7 @@ public class LoadActivity extends AppCompatActivity {
 
             @Override
             public void onPermissionDenied(List<String> deniedPermissions) {
-                Toast.makeText(LoadActivity.this, "Denied Permission", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoadActivity.this, "권한 거부", Toast.LENGTH_SHORT).show();
                 finish();
             }
         };
@@ -49,7 +49,7 @@ public class LoadActivity extends AppCompatActivity {
         TedPermission.with(this)
                 .setPermissionListener(permissionListener)
                 .setRationaleMessage("카메라 접근권한이 필요합니다.")
-                .setDeniedMessage("Denied")
+                .setDeniedMessage("거부")
                 .setPermissions(
                         Manifest.permission.CAMERA,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
