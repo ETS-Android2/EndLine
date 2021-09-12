@@ -1,17 +1,22 @@
 package com.example.endline_v1;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -21,7 +26,7 @@ import java.util.Calendar;
 public class ScanBarCode extends AppCompatActivity {
 
     EditText ed_barcode, ed_productName, ed_category, ed_price, ed_buyDay, ed_endline;
-    DatePickerDialog.OnDateSetListener callback;
+    Button btn_buyDatePicker, btn_endLinePicker, btn_insertScan, btn_cancelScan;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,28 +38,34 @@ public class ScanBarCode extends AppCompatActivity {
         ed_price = (EditText) findViewById(R.id.ed_price);
         ed_buyDay = (EditText) findViewById(R.id.ed_buyDay);
         ed_endline = (EditText) findViewById(R.id.ed_endline);
+        btn_buyDatePicker = (Button) findViewById(R.id.btn_buyDatePicker);
+        btn_endLinePicker = (Button) findViewById(R.id.btn_endLinePicker);
+        btn_insertScan = (Button) findViewById(R.id.btn_insertScan);
+        btn_cancelScan = (Button) findViewById(R.id.btn_cancelScan);
 
-        callback = new DatePickerDialog.OnDateSetListener() {
+        View.OnClickListener showDatePicker = new View.OnClickListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                ed_buyDay.setText(year + "." + month + "." + dayOfMonth);
+            public void onClick(View v) {
+                new DatePickerDialog(ScanBarCode.this).show();
             }
         };
 
-        ed_buyDay.setOnTouchListener(new View.OnTouchListener() {
+        btn_buyDatePicker.setOnClickListener(showDatePicker);
+        btn_endLinePicker.setOnClickListener(showDatePicker);
+        
+        btn_insertScan.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                Calendar c = Calendar.getInstance();
-                int year = c.get(Calendar.YEAR);
-                int month = c.get(Calendar.MONTH);
-                int day = c.get(Calendar.DAY_OF_MONTH);
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(getApplicationContext(), callback, year, month, day);
-                datePickerDialog.show();
-
-                Toast.makeText(getApplicationContext(), "onTouch", Toast.LENGTH_SHORT).show();
-
-                return true;
+            public void onClick(View v) {
+                finish();
+                Toast.makeText(getApplicationContext(), "입력 버튼", Toast.LENGTH_SHORT).show();
+            }
+        });
+        
+        btn_cancelScan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                Toast.makeText(getApplicationContext(), "취소 버튼", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -65,7 +76,8 @@ public class ScanBarCode extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        Toast.makeText(this, "ISBN : " + result.getContents(), Toast.LENGTH_LONG).show();
+        ed_barcode.setText("바코드 번호 : " + result.getContents());
+//        Toast.makeText(this, "ISBN : " + result.getContents(), Toast.LENGTH_LONG).show();
     }
 
     @Override

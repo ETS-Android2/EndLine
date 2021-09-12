@@ -21,6 +21,7 @@
             android:layout_height="match_parent"
             android:layout_margin="10dp"
             android:layout_weight="1"
+            android:enabled="false"
             android:hint="바코드 번호"
             />
         <EditText
@@ -47,21 +48,77 @@
             android:layout_weight="1"
             android:hint="가격"
             />
-        <EditText
-            android:id="@+id/ed_buyDay"
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
             android:layout_weight="1"
-            android:hint="구매 일자"
-            />
-        <EditText
-            android:id="@+id/ed_endline"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            >
+
+            <EditText
+                android:id="@+id/ed_buyDay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:hint="구매 일자"
+                android:enabled="false"
+                android:textSize="18dp" />
+
+            <Button
+                android:id="@+id/btn_buyDatePicker"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:layout_weight="3"
+                android:text="달력" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
             android:layout_weight="1"
-            android:hint="유통 기한"
-            />
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/ed_endline"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:hint="유통 기한"
+                android:enabled="false"
+                android:textSize="18dp" />
+
+            <Button
+                android:id="@+id/btn_endLinePicker"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:layout_weight="3"
+                android:text="달력" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btn_insertScan"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:text="입력"/>
+            <Button
+                android:id="@+id/btn_cancelScan"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:text="취소"/>
+        </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
