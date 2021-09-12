@@ -52,6 +52,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private TextView tv_result;     //User ID
     private ImageView iv_profile;   //User Profile Photo
 
+    public static String displayName = "";
+    public static String profilePhotoUrl = "";
+    public static boolean isLogin = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         //R.id.nav_gallery, R.id.nav_slideshow,
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_beauty, R.id.nav_food,
-                R.id.nav_health, R.id.nav_medical, R.id.nav_login)
+                R.id.nav_health, R.id.nav_medical, R.id.nav_profile)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -83,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
+
 
         googleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this)
@@ -99,6 +104,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 startActivityForResult(intent, REQ_SIGN_GOOGLE);
             }
         });
+    }
+
+    public boolean toggleIsSignIn(){
+        isLogin = !isLogin;
+        return isLogin;
     }
 
     public void OnFragmentChange(int index){
@@ -162,7 +172,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                             iv_profile = (ImageView) findViewById(R.id.iv_profile);
 
                             tv_result.setText(account.getDisplayName().toString());
+                            displayName = account.getDisplayName();
+
                             Glide.with(MainActivity.this).load(String.valueOf(account.getPhotoUrl())).into(iv_profile);
+                            profilePhotoUrl = account.getPhotoUrl().toString();
+
+                            toggleIsSignIn();
                         }else{  //Login Fail
                             Toast.makeText(MainActivity.this, "Fail Login", Toast.LENGTH_SHORT).show();
                         }
@@ -177,6 +192,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         tv_result.setVisibility(View.GONE);
         iv_profile.setVisibility(View.GONE);
+
+        displayName = "";
+        profilePhotoUrl = "";
+
+        toggleIsSignIn();
     }
 
     @Override

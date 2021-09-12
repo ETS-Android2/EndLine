@@ -25,10 +25,10 @@
 
     <!-- Add Custom Fragment -->
     <fragment
-        android:id="@+id/nav_login"
-        android:name="com.example.endline_v1.ui.login.LoginFragment"
-        android:label="@string/menu_login"
-        tools:layout="@layout/fragment_login" />
+        android:id="@+id/nav_profile"
+        android:name="com.example.endline_v1.ui.login.ProfileFragment"
+        android:label="@string/menu_profile"
+        tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/nav_beauty"
         android:name="com.example.endline_v1.ui.beauty.BeautyFragment"
