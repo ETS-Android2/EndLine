@@ -3,6 +3,7 @@ package com.example.endline_v1;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
@@ -55,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     public static String displayName = "";
     public static String profilePhotoUrl = "";
     public static boolean isLogin = false;
+
+    private long backBtnTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,9 +203,31 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
     @Override
+    public void onBackPressed() {
+        long curTime = System.currentTimeMillis();
+        long gapTime = curTime - backBtnTime;
+
+        if(0<= gapTime && 2000 >= gapTime){
+            super.onBackPressed();
+        }else{
+            backBtnTime = curTime;
+            Toast.makeText(getApplicationContext(), "뒤로 가기 버튼을 한 번 더 누르시면 종료됩니다", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() == R.id.action_notification){
+            Intent i = new Intent(MainActivity.this, SettingActivity.class);
+            startActivity(i);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
