@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="spiner_item">
+        <item>카테고리</item>
+        <item>식품</item>
+        <item>화장품</item>
+        <item>건강</item>
+        <item>의약품</item>
+    </string-array>
+</resources>
