@@ -46,7 +46,7 @@ public class ScanBarCode extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanpage);
         
-        getSupportActionBar().setTitle("제품 입력");
+//        getSupportActionBar().setTitle("제품 입력");
 
         et_barcode = (EditText) findViewById(R.id.et_barcode);
         et_productName = (EditText) findViewById(R.id.et_productName);

@@ -224,8 +224,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.action_notification){
-            Intent i = new Intent(MainActivity.this, SettingActivity.class);
-            startActivity(i);
+            Intent iNotification = new Intent(MainActivity.this, SettingActivity.class);
+            startActivity(iNotification);
+        }else if(item.getItemId() == R.id.action_search){
+            Intent iSearch = new Intent(MainActivity.this, SearchActivity.class);
+            startActivity(iSearch);
         }
         return super.onOptionsItemSelected(item);
     }

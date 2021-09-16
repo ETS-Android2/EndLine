@@ -64,19 +64,6 @@ public class HealthFragment extends Fragment {
             }
         });
 
-//        firestore.collection("mainData").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if(task.isSuccessful()){
-//                    for(QueryDocumentSnapshot document : task.getResult()){
-//                        Log.d("getData", document.getId() + " => " + document.getData());
-//                    }
-//                }else{
-//                    Log.w("getData", "error");
-//                }
-//            }
-//        });
-
         return root;
     }
 }
