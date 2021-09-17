@@ -46,11 +46,6 @@ public class SearchActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.homeAsUp:
-                finish();
-                return false;
-        }
 
         return super.onOptionsItemSelected(item);
     }
