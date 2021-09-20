@@ -8,27 +8,36 @@
 
    registrate with barcode for convenience
 
-3. purpose
+2. purpose
 
     - for administrate expiration date with convenience
     - get data from user and reflect data at real time
     - send push message to user for important notification 
     - simple and easy when people put there data
 
-3. platform
+3. function
+    - login & logout with google account
+    - user get push message
+    - realtime database
+    - scan barcode 
+    - write data automatically
+    - filtering items
+    - CRUD from database
+
+4. platform
 
     <img src="https://img.shields.io/badge/-Java-00758F?logo=Java&logoColor=white" />    
     <img src="https://img.shields.io/badge/-Android-brightgreen?logo=Android&logoColor=white" />
 
-4. develop tools
+5. develop tools
 
     <img src="https://img.shields.io/badge/-Android Studio-3DDC84?logo=AndroidStudio&logoColor=white" />
 
-5. back-end
+6. back-end
 
     <img src="https://img.shields.io/badge/-Firebase-white?logo=Firebase&logoColor=FFCA28" />
 
-6. using library
+7. using library
 
     zxing
     > for scan barcode number
@@ -39,15 +48,19 @@
     firebase
     > to connect and use firebase
 
-7. note
+    uuid
+    > get random id number
+
+8. note
 
     zxing package have some error at initializing
 
     I don't know exactly why, but i guess . . .
     > app dosen't initialize but app was runing
 
-8. release
+9. release
+    > unstable
 
-    - ver.1 (2021-09-20 now)
-        > early develop version
-        > unstable
+        ver.1 (2021-09-20 now)
+            early develop version
+            unstable
