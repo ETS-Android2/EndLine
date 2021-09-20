@@ -4,9 +4,7 @@
 
 1. What is End-Line?
 
-   administrate expiration date
-
-   registrate with barcode for convenience
+   administrate expiration date application
 
 2. purpose
 
