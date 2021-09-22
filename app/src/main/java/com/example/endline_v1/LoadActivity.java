@@ -39,7 +39,7 @@ public class LoadActivity extends AppCompatActivity implements GoogleApiClient.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_load);
 
-
+        //permission listener
         PermissionListener permissionListener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
@@ -52,8 +52,7 @@ public class LoadActivity extends AppCompatActivity implements GoogleApiClient.O
             }
         };
 
-
-
+        //check permission
         TedPermission.with(this)
                 .setPermissionListener(permissionListener)
                 .setRationaleMessage("카메라 접근권한이 필요합니다.")
@@ -66,7 +65,10 @@ public class LoadActivity extends AppCompatActivity implements GoogleApiClient.O
                         Manifest.permission.ACCESS_NETWORK_STATE)
                 .check();
 
+        //firebase auth
         auth = FirebaseAuth.getInstance();
+
+        //google sign in option
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
@@ -76,6 +78,7 @@ public class LoadActivity extends AppCompatActivity implements GoogleApiClient.O
                 .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
                 .build();
 
+        //google login button click function
         btn_google = findViewById(R.id.btn_google);
         btn_google.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,6 +92,7 @@ public class LoadActivity extends AppCompatActivity implements GoogleApiClient.O
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        //return from google login pop-up
         if(requestCode == REQ_SIGN_GOOGLE){
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if(result.isSuccess()){
