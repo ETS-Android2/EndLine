@@ -1,6 +1,7 @@
 package com.example.endline_v1;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -30,6 +31,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import androidx.annotation.NonNull;
@@ -45,7 +47,6 @@ import androidx.appcompat.widget.Toolbar;
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private AppBarConfiguration mAppBarConfiguration;
-    private SignInButton btn_google;                    //Login Button
     private FirebaseAuth auth;                          //Auth
     private GoogleApiClient googleApiClient;            //Google API Client
     private static final int REQ_SIGN_GOOGLE = 100;     //Result Code of Google Login
@@ -57,7 +58,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     public static String profilePhotoUrl = "";
     public static boolean isLogin = false;
 
+    public Intent accountIntent;
+
     private long backBtnTime = 0;
+
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             }
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         //R.id.nav_gallery, R.id.nav_slideshow,
@@ -97,18 +102,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
                 .build();
 
+        accountIntent = getIntent();
         auth = FirebaseAuth.getInstance();      //Get Auth Instance
-
-        btn_google = navigationView.getHeaderView(0).findViewById(R.id.btn_google);
-        btn_google.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);      //Go to Google Login Interface
-                startActivityForResult(intent, REQ_SIGN_GOOGLE);
-            }
-        });
+        FirebaseUser user =  auth.getCurrentUser();
+        if(user != null){
+            Log.d("user info", user.getDisplayName());
+            resultLogin(user);
+        }
     }
 
+    //change login state
     public boolean toggleIsSignIn(){
         isLogin = !isLogin;
         return isLogin;
@@ -146,62 +149,54 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 Log.v("LogOut Event", "Suspended");
             }
         });
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == REQ_SIGN_GOOGLE){
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            if(result.isSuccess()){     //Check Auth State
-                GoogleSignInAccount account = result.getSignInAccount();    //Get Every Login Information(Photo, ID, Email, PW...)
-                resultLogin(account);   //Print Login Information
-            }
-        }
     }
 
-    private void resultLogin(GoogleSignInAccount account) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-        auth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {    //Check Login State
-                        if(task.isSuccessful()){    //Login Success
-                            Toast.makeText(MainActivity.this, "Success Login", Toast.LENGTH_SHORT).show();
-                            btn_google.setVisibility(View.GONE);
-                            tv_result = (TextView) findViewById(R.id.tv_id);
-                            iv_profile = (ImageView) findViewById(R.id.iv_profile);
+    //set user profile
+    private void resultLogin(FirebaseUser user) {
+//        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+//        auth.signInWithCredential(credential)
+//                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {    //Check Login State
+//                        if(task.isSuccessful()){    //Login Success
+//                            tv_result = (TextView) findViewById(R.id.tv_id);
+//                            iv_profile = (ImageView) findViewById(R.id.iv_profile);
+//
+//                            tv_result.setText(account.getDisplayName().toString());
+//                            displayName = account.getDisplayName();
+//
+//                            Glide.with(MainActivity.this).load(String.valueOf(account.getPhotoUrl())).into(iv_profile);
+//                            profilePhotoUrl = account.getPhotoUrl().toString();
+//
+//                            toggleIsSignIn();
+//                        }else{  //Login Fail
+//                            Toast.makeText(MainActivity.this, "Fail Login", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
+        tv_result = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_id);
+        iv_profile = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.iv_profile);
 
-                            tv_result.setText(account.getDisplayName().toString());
-                            displayName = account.getDisplayName();
+        Log.d("resultLogin name", displayName);
 
-                            Glide.with(MainActivity.this).load(String.valueOf(account.getPhotoUrl())).into(iv_profile);
-                            profilePhotoUrl = account.getPhotoUrl().toString();
-
-                            toggleIsSignIn();
-                        }else{  //Login Fail
-                            Toast.makeText(MainActivity.this, "Fail Login", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
-
-    private void resultLogout(){
-        btn_google.setVisibility(View.VISIBLE);
-        tv_result = (TextView) findViewById(R.id.tv_id);
-        iv_profile = (ImageView) findViewById(R.id.iv_profile);
-
-        tv_result.setVisibility(View.GONE);
-        iv_profile.setVisibility(View.GONE);
-
-        displayName = "";
-        profilePhotoUrl = "";
-
+        tv_result.setText(user.getDisplayName());
+        Glide.with(MainActivity.this).load(user.getPhotoUrl()).into(iv_profile);
         toggleIsSignIn();
     }
 
+    //after logout => push to load activity
+    private void resultLogout(){
+        Intent intent = new Intent(this, LoadActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    //back button safety
     @Override
     public void onBackPressed() {
         long curTime = System.currentTimeMillis();
@@ -215,6 +210,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         }
     }
 
+    //create notification, search menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
@@ -223,10 +219,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        //notification setting page
         if(item.getItemId() == R.id.action_notification){
             Intent iNotification = new Intent(MainActivity.this, SettingActivity.class);
             startActivity(iNotification);
-        }else if(item.getItemId() == R.id.action_search){
+        }else if(item.getItemId() == R.id.action_search){   //search activity start
             Intent iSearch = new Intent(MainActivity.this, SearchActivity.class);
             startActivity(iSearch);
         }

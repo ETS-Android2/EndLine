@@ -77,8 +77,6 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-
-
 //        get profile photo url from mainActivity, but get null reference, why?
 //        Glide.with(mainActivity.getApplicationContext()).load(Uri.parse(mainActivity.profilePhotoUrl)).into(iv_profilePhoto);
 

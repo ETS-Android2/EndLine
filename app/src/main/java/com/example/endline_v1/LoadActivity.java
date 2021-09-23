@@ -99,7 +99,12 @@ public class LoadActivity extends AppCompatActivity implements GoogleApiClient.O
                 GoogleSignInAccount account = result.getSignInAccount();
                 Log.d(TAG, "이름 ==> " + account.getDisplayName());
                 Toast.makeText(this,  account.getDisplayName().toString() + "님 환영합니다", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.putExtra("displayName", account.getDisplayName());
+                intent.putExtra("photoUrl", account.getPhotoUrl());
+                intent.putExtra("id", account.getId());
+                intent.putExtra("idToken", account.getIdToken());
+                startActivity(intent);
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 finish();
             }
