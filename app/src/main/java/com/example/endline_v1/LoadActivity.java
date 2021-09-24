@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,6 +22,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnCanceledListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
@@ -34,10 +43,86 @@ public class LoadActivity extends AppCompatActivity implements GoogleApiClient.O
     private static final int REQ_SIGN_GOOGLE = 100;
     private static final String TAG = "Login Status";
 
+    Button btn_login, btn_join;
+    EditText et_email, et_password;
+    TextView tv_toggle;
+
+    boolean isNewAccount = true;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_load);
+
+        btn_login = (Button) findViewById(R.id.btn_login);
+        btn_join = (Button) findViewById(R.id.btn_join);
+        et_email = (EditText) findViewById(R.id.et_email);
+        et_password  = (EditText) findViewById(R.id.et_password);
+        tv_toggle = (TextView) findViewById(R.id.tv_toggle);
+
+        tv_toggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isNewAccount = !isNewAccount;
+                Log.d("isNewAccount", isNewAccount + "");
+                toggleButton(isNewAccount);
+            }
+        });
+
+        btn_join.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                auth.createUserWithEmailAndPassword(et_email.getText().toString(), et_password.getText().toString()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                    @Override
+                    public void onSuccess(AuthResult authResult) {
+                        Toast.makeText(getApplicationContext(), "회원가입 성공", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(getApplicationContext(), "회원가입 실패", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnCanceledListener(new OnCanceledListener() {
+                    @Override
+                    public void onCanceled() {
+                        Toast.makeText(getApplicationContext(), "사용자 회원가입 취소", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d("createUser", "Uid => " + auth.getUid());
+                    }
+                });
+            }
+        });
+
+        btn_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                auth.signInWithEmailAndPassword(et_email.getText().toString(), et_password.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                        finish();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+                }).addOnCanceledListener(new OnCanceledListener() {
+                    @Override
+                    public void onCanceled() {
+                        Toast.makeText(getApplicationContext(), "사용자 로그인 취소", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
 
         //permission listener
         PermissionListener permissionListener = new PermissionListener() {
@@ -87,6 +172,22 @@ public class LoadActivity extends AppCompatActivity implements GoogleApiClient.O
                 startActivityForResult(intent, REQ_SIGN_GOOGLE);
             }
         });
+    }
+
+    private void toggleButton(boolean isNewAccount) {
+        if(isNewAccount){
+            btn_login.setVisibility(View.INVISIBLE);
+            btn_login.setEnabled(false);
+            btn_join.setVisibility(View.VISIBLE);
+            btn_join.setEnabled(true);
+            tv_toggle.setText("로그인");
+        }else{
+            btn_join.setVisibility(View.INVISIBLE);
+            btn_join.setEnabled(false);
+            btn_login.setVisibility(View.VISIBLE);
+            btn_login.setEnabled(true);
+            tv_toggle.setText("회원가입");
+        }
     }
 
     @Override

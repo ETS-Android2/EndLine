@@ -24,6 +24,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -33,6 +35,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -54,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private TextView tv_result;     //User ID
     private ImageView iv_profile;   //User Profile Photo
 
-    public static String displayName = "";
+    public static String sdisplayName = "";
     public static String profilePhotoUrl = "";
     public static boolean isLogin = false;
 
@@ -106,6 +109,22 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         auth = FirebaseAuth.getInstance();      //Get Auth Instance
         FirebaseUser user =  auth.getCurrentUser();
         if(user != null){
+            if(user.getDisplayName() == null){
+                Log.d("DisplayName", "start");
+                UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder().setDisplayName("Set Display Name").build();
+                user.updateProfile(profileChangeRequest).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("update DisplayName", "Success");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        e.printStackTrace();
+                        Log.e("update DisplayName", "fail");
+                    }
+                });
+            }
             Log.d("user info", user.getDisplayName());
             resultLogin(user);
         }
@@ -182,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         tv_result = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_id);
         iv_profile = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.iv_profile);
 
-        Log.d("resultLogin name", displayName);
+        Log.d("resultLogin name", sdisplayName);
 
         tv_result.setText(user.getDisplayName());
         Glide.with(MainActivity.this).load(user.getPhotoUrl()).into(iv_profile);

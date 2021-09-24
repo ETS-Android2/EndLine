@@ -62,7 +62,7 @@ public class ProfileFragment extends Fragment {
             btn_logout.setVisibility(View.GONE);
             et_displayName.setText("");
         }else{  //login state
-            et_displayName.setText(mainActivity.displayName);
+            et_displayName.setText(mainActivity.sdisplayName);
         }
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override

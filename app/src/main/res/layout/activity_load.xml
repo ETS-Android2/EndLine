@@ -34,6 +34,7 @@
         android:layout_margin="10dp"
         android:padding="10dp"
         android:textSize="17dp"
+        android:inputType="textPassword"
         android:background="#ffffff"
         android:hint="password"/>
 
@@ -45,6 +46,26 @@
         android:layout_centerHorizontal="true"
         android:backgroundTint="@color/light_blue"
         android:text="로그인" />
+
+    <Button
+        android:id="@+id/btn_join"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="회원가입"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/et_password"
+        android:backgroundTint="@color/light_blue"/>
+
+    <TextView
+        android:id="@+id/tv_toggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="로그인"
+        android:layout_below="@+id/btn_login"
+        android:layout_centerHorizontal="true"
+        android:textSize="12dp"
+        android:layout_marginTop="5dp"
+        android:textColor="#919191"/>
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/btn_google"
