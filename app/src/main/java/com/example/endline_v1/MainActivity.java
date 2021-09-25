@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     }
                 });
             }
-            Log.d("user info", user.getDisplayName());
+            Log.d("user info", user.getDisplayName().toString());
             resultLogin(user);
         }
     }
