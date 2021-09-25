@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
     //set user profile
-    private void resultLogin(FirebaseUser user) {
+    public void resultLogin(FirebaseUser user) {
 //        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
 //        auth.signInWithCredential(credential)
 //                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -205,7 +205,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         tv_result.setText(user.getDisplayName());
         Glide.with(MainActivity.this).load(user.getPhotoUrl()).into(iv_profile);
-        toggleIsSignIn();
     }
 
     //after logout => push to load activity

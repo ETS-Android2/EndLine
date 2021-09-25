@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +23,17 @@ import androidx.lifecycle.ViewModelProvider;
 import com.bumptech.glide.Glide;
 import com.example.endline_v1.MainActivity;
 import com.example.endline_v1.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class ProfileFragment extends Fragment {
 
     MainActivity mainActivity;
     private ProfileViewModel profileViewModel;
-    public Button btn_logout;
-    Button btn_updateProfile;
+    Button btn_logout, btn_updateProfile;
     ImageView iv_profilePhoto;
     EditText et_displayName;
 
@@ -57,6 +62,7 @@ public class ProfileFragment extends Fragment {
         });
 
         et_displayName = (EditText) root.findViewById(R.id.et_displayName);
+        btn_updateProfile = (Button) root.findViewById(R.id.btn_updateProfile);
         btn_logout = (Button) root.findViewById(R.id.btn_logout);
         if(!mainActivity.isLogin){  //none Login state
             btn_logout.setVisibility(View.GONE);
@@ -74,6 +80,27 @@ public class ProfileFragment extends Fragment {
                 startActivity(i);
 
                 et_displayName.setText("");
+            }
+        });
+
+        btn_updateProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth auth = FirebaseAuth.getInstance();
+                FirebaseUser user = auth.getCurrentUser();
+                UserProfileChangeRequest request = new UserProfileChangeRequest.Builder().setDisplayName(et_displayName.getText().toString()).build();
+                user.updateProfile(request).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            Toast.makeText(getActivity(), "변경되었습니다.", Toast.LENGTH_SHORT).show();
+                            mainActivity.resultLogin(user);
+                            Log.d("UPDATE NAME", et_displayName.getText().toString());
+                        }else{
+                            Log.w("UPDATE NAME", "failed");
+                        }
+                    }
+                });
             }
         });
 
