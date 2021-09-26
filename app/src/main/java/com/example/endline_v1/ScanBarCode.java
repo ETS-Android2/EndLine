@@ -29,7 +29,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -121,6 +123,7 @@ public class ScanBarCode extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), user.getUid(), Toast.LENGTH_SHORT).show();
                 data.put("UID", user.getUid());
                 data.put("바코드 번호", et_barcode.getText().toString().substring(9));
+                data.put("등록 일자", getTime());
                 data.put("제품명", et_productName.getText().toString());
                 data.put("카테고리", et_category.getText().toString());
                 data.put("가격", et_price.getText().toString());
@@ -149,6 +152,14 @@ public class ScanBarCode extends AppCompatActivity {
         });
 
         new IntentIntegrator(this).initiateScan();
+    }
+
+    private String getTime(){
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String getTime = dateFormat.format(date);
+        return getTime;
     }
 
     @Override
