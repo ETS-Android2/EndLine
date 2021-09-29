@@ -21,6 +21,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.example.endline_v1.LoadActivity;
 import com.example.endline_v1.MainActivity;
 import com.example.endline_v1.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -68,6 +69,7 @@ public class ProfileFragment extends Fragment {
             btn_logout.setVisibility(View.GONE);
             et_displayName.setText("");
         }else{  //login state
+            btn_logout.setVisibility(View.VISIBLE);
             et_displayName.setText(mainActivity.sdisplayName);
         }
         btn_logout.setOnClickListener(new View.OnClickListener() {
@@ -76,7 +78,7 @@ public class ProfileFragment extends Fragment {
                 mainActivity.OnFragmentChange(1);
                 Toast.makeText(getActivity(), "로그아웃", Toast.LENGTH_SHORT).show();
 
-                Intent i = new Intent(getActivity(), MainActivity.class);
+                Intent i = new Intent(getActivity(), LoadActivity.class);
                 startActivity(i);
 
                 et_displayName.setText("");
