@@ -72,31 +72,25 @@ public class LoadActivity extends AppCompatActivity implements GoogleApiClient.O
         btn_join.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                auth.createUserWithEmailAndPassword(et_email.getText().toString(), et_password.getText().toString()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                    @Override
-                    public void onSuccess(AuthResult authResult) {
-                        Toast.makeText(getApplicationContext(), "회원가입 성공", Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
+                auth.createUserWithEmailAndPassword(et_email.getText().toString(), et_password.getText().toString()).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         e.printStackTrace();
                         Toast.makeText(getApplicationContext(), "회원가입 실패", Toast.LENGTH_SHORT).show();
                     }
-                }).addOnCanceledListener(new OnCanceledListener() {
-                    @Override
-                    public void onCanceled() {
-                        Toast.makeText(getApplicationContext(), "사용자 회원가입 취소", Toast.LENGTH_SHORT).show();
-                    }
                 }).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d("createUser", "Uid => " + auth.getUid());
-                        Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(intent);
-                        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                        finish();
+                        if(task.isSuccessful()){
+                            Log.d("createUser", "Uid => " + auth.getUid());
+                            Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                            finish();
+                        }else if(task.isCanceled()){
+                            Toast.makeText(getApplicationContext(), "사용자 회원가입 취소", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
             }

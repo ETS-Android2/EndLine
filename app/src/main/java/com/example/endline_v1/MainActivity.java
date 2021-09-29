@@ -108,26 +108,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         accountIntent = getIntent();
         auth = FirebaseAuth.getInstance();      //Get Auth Instance
         FirebaseUser user =  auth.getCurrentUser();
-        if(user != null){
-            if(user.getDisplayName() == null){
-                Log.d("DisplayName", "start");
-                UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder().setDisplayName("Set Display Name").build();
-                user.updateProfile(profileChangeRequest).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("update DisplayName", "Success");
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        e.printStackTrace();
-                        Log.e("update DisplayName", "fail");
-                    }
-                });
-            }
-            Log.d("user info", user.getDisplayName().toString());
-            resultLogin(user);
-        }
+
+        //when user.getDisplayName get null, then connect string "" to error exception
+        Log.d("user info", user.getDisplayName() + "");
+        resultLogin(user);
     }
 
     //change login state
@@ -177,34 +161,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     //set user profile
     public void resultLogin(FirebaseUser user) {
-//        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-//        auth.signInWithCredential(credential)
-//                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {    //Check Login State
-//                        if(task.isSuccessful()){    //Login Success
-//                            tv_result = (TextView) findViewById(R.id.tv_id);
-//                            iv_profile = (ImageView) findViewById(R.id.iv_profile);
-//
-//                            tv_result.setText(account.getDisplayName().toString());
-//                            displayName = account.getDisplayName();
-//
-//                            Glide.with(MainActivity.this).load(String.valueOf(account.getPhotoUrl())).into(iv_profile);
-//                            profilePhotoUrl = account.getPhotoUrl().toString();
-//
-//                            toggleIsSignIn();
-//                        }else{  //Login Fail
-//                            Toast.makeText(MainActivity.this, "Fail Login", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                });
         tv_result = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_id);
         iv_profile = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.iv_profile);
 
-        Log.d("resultLogin name", sdisplayName);
-
         tv_result.setText(user.getDisplayName());
         Glide.with(MainActivity.this).load(user.getPhotoUrl()).into(iv_profile);
+
+        toggleIsSignIn();
     }
 
     //after logout => push to load activity
