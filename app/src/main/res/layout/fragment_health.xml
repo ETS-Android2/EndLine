@@ -20,4 +20,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+<!-- List can't use in fragmnet layout _ in Design branch -->
+
 </androidx.constraintlayout.widget.ConstraintLayout>
