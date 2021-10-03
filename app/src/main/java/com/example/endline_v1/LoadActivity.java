@@ -32,13 +32,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LoadActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     SignInButton btn_google;
     GoogleApiClient googleApiClient;
     FirebaseAuth auth;
+    Map accountData;
 
     private static final int REQ_SIGN_GOOGLE = 100;
     private static final String TAG = "Login Status";
@@ -198,10 +201,10 @@ public class LoadActivity extends AppCompatActivity implements GoogleApiClient.O
             if(result.isSuccess()){
                 GoogleSignInAccount account = result.getSignInAccount();
                 Log.d(TAG, "이름 ==> " + account.getDisplayName());
-                Toast.makeText(this,  account.getDisplayName().toString() + "님 환영합니다", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,  account.getDisplayName() + "님 환영합니다", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.putExtra("displayName", account.getDisplayName());
-                intent.putExtra("photoUrl", account.getPhotoUrl());
+                intent.putExtra("photoUrl", account.getPhotoUrl().toString());
                 intent.putExtra("id", account.getId());
                 intent.putExtra("idToken", account.getIdToken());
                 startActivity(intent);

@@ -47,21 +47,21 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, FirebaseAuth.AuthStateListener {
 
     private AppBarConfiguration mAppBarConfiguration;
-    private FirebaseAuth auth;                          //Auth
+    private FirebaseAuth auth = FirebaseAuth.getInstance(); //Auth
     private GoogleApiClient googleApiClient;            //Google API Client
     private static final int REQ_SIGN_GOOGLE = 100;     //Result Code of Google Login
 
     private TextView tv_result;     //User ID
     private ImageView iv_profile;   //User Profile Photo
 
-    public static String sdisplayName = "";
+    public static String displayName = "";
     public static String profilePhotoUrl = "";
     public static boolean isLogin = false;
 
-    public Intent accountIntent;
+    public Intent account;
 
     private long backBtnTime = 0;
 
@@ -99,19 +99,28 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 .requestEmail()
                 .build();
 
-
         googleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
                 .build();
 
-        accountIntent = getIntent();
-        auth = FirebaseAuth.getInstance();      //Get Auth Instance
-        FirebaseUser user =  auth.getCurrentUser();
+        account = getIntent();
+        displayName = account.getStringExtra("displayName");
+        profilePhotoUrl = account.getStringExtra("photoUrl");
+        Log.w("INTENT DATA", account.toString());
+        resultLogin(displayName, profilePhotoUrl);
+    }
 
-        //when user.getDisplayName get null, then connect string "" to error exception
-        Log.d("user info", user.getDisplayName() + "");
-        resultLogin(user);
+    @Override
+    protected void onStart() {
+        super.onStart();
+        auth.addAuthStateListener(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        auth.removeAuthStateListener(this);
     }
 
     //change login state
@@ -160,12 +169,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
     //set user profile
-    public void resultLogin(FirebaseUser user) {
+    public void resultLogin(String displayName, String photoUrl) {
+        Uri uri = Uri.parse(photoUrl);
+
         tv_result = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_id);
         iv_profile = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.iv_profile);
 
-        tv_result.setText(user.getDisplayName());
-        Glide.with(MainActivity.this).load(user.getPhotoUrl()).into(iv_profile);
+        tv_result.setText(displayName);
+        Glide.with(MainActivity.this).load(uri).into(iv_profile);
 
         toggleIsSignIn();
     }
@@ -221,5 +232,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    @Override
+    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+        if(firebaseAuth.getCurrentUser() == null){
+            Log.d("AUTH STATE", "null");
+//            startActivity(new Intent(this, LoadActivity.class));
+//            finish();
+            return;
+        }
+        Log.d("AUTH STATE", firebaseAuth.getUid());
     }
 }
