@@ -30,13 +30,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements FirebaseAuth.AuthStateListener {
 
     MainActivity mainActivity;
     private ProfileViewModel profileViewModel;
     Button btn_logout, btn_updateProfile;
     ImageView iv_profilePhoto;
     EditText et_displayName;
+    FirebaseAuth auth;
 
     @Override
     public void onAttach(@NonNull Activity activity) {
@@ -62,6 +63,8 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        auth = FirebaseAuth.getInstance();
+
         et_displayName = (EditText) root.findViewById(R.id.et_displayName);
         btn_updateProfile = (Button) root.findViewById(R.id.btn_updateProfile);
         btn_logout = (Button) root.findViewById(R.id.btn_logout);
@@ -70,18 +73,12 @@ public class ProfileFragment extends Fragment {
             et_displayName.setText("");
         }else{  //login state
             btn_logout.setVisibility(View.VISIBLE);
-            et_displayName.setText(mainActivity.sdisplayName);
+            et_displayName.setText(mainActivity.displayName);
         }
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mainActivity.OnFragmentChange(1);
-                Toast.makeText(getActivity(), "로그아웃", Toast.LENGTH_SHORT).show();
-
-                Intent i = new Intent(getActivity(), LoadActivity.class);
-                startActivity(i);
-
-                et_displayName.setText("");
+                auth.signOut();
             }
         });
 
@@ -96,7 +93,7 @@ public class ProfileFragment extends Fragment {
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
                             Toast.makeText(getActivity(), "변경되었습니다.", Toast.LENGTH_SHORT).show();
-                            mainActivity.resultLogin(user);
+                            mainActivity.resultLogin();
                             Log.d("UPDATE NAME", et_displayName.getText().toString());
                         }else{
                             Log.w("UPDATE NAME", "failed");
@@ -110,5 +107,14 @@ public class ProfileFragment extends Fragment {
 //        Glide.with(mainActivity.getApplicationContext()).load(Uri.parse(mainActivity.profilePhotoUrl)).into(iv_profilePhoto);
 
         return root;
+    }
+
+    @Override
+    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+        if(firebaseAuth.getCurrentUser() == null){
+            Log.d("USER", "NULL ERROR");
+        }else{
+            Log.d("USER", firebaseAuth.getUid());
+        }
     }
 }

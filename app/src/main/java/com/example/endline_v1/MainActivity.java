@@ -50,9 +50,8 @@ import androidx.appcompat.widget.Toolbar;
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, FirebaseAuth.AuthStateListener {
 
     private AppBarConfiguration mAppBarConfiguration;
-    private FirebaseAuth auth = FirebaseAuth.getInstance(); //Auth
-    private GoogleApiClient googleApiClient;            //Google API Client
-    private static final int REQ_SIGN_GOOGLE = 100;     //Result Code of Google Login
+    private FirebaseAuth auth; //Auth
+    FirebaseUser user;
 
     private TextView tv_result;     //User ID
     private ImageView iv_profile;   //User Profile Photo
@@ -60,8 +59,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     public static String displayName = "";
     public static String profilePhotoUrl = "";
     public static boolean isLogin = false;
-
-    public Intent account;
 
     private long backBtnTime = 0;
 
@@ -71,6 +68,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        auth = FirebaseAuth.getInstance();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -94,26 +93,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
-                .build();
-
-        account = getIntent();
-        displayName = account.getStringExtra("displayName");
-        profilePhotoUrl = account.getStringExtra("photoUrl");
-        Log.w("INTENT DATA", account.toString());
-        resultLogin(displayName, profilePhotoUrl);
+        resultLogin();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        user = auth.getCurrentUser();
         auth.addAuthStateListener(this);
     }
 
@@ -123,69 +109,32 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         auth.removeAuthStateListener(this);
     }
 
+    @Override
+    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+        if(firebaseAuth.getCurrentUser() == null){
+            Log.d("AUTH STATE", "Main fail");
+//            startActivity(new Intent(this, LoadActivity.class));
+//            finish();
+            return;
+        }
+        Log.d("AUTH STATE", firebaseAuth.getUid());
+    }
+
     //change login state
     public boolean toggleIsSignIn(){
         isLogin = !isLogin;
         return isLogin;
     }
 
-    public void OnFragmentChange(int index){
-        if(index == 1){
-            signOut();
-        }
-    }
-
-    private void signOut() {
-        googleApiClient.connect();
-        googleApiClient.registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
-            @Override
-            public void onConnected(@Nullable Bundle bundle) {
-                auth.signOut();
-                Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(@NonNull Status status) {
-                        if (status.isSuccess()){
-                            Log.v("LogOut Event", "Success");
-                            Toast.makeText(getApplicationContext(), "로그아웃성공", Toast.LENGTH_SHORT).show();
-                            resultLogout();
-                        }
-                        else{
-                            Log.v("LogOut Event", "Fail");
-                            Toast.makeText(getApplicationContext(), "로그아웃실패", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
-            @Override
-            public void onConnectionSuspended(int i) {
-                Log.v("LogOut Event", "Suspended");
-            }
-        });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
     //set user profile
-    public void resultLogin(String displayName, String photoUrl) {
-        Uri uri = Uri.parse(photoUrl);
-
+    public void resultLogin() {
         tv_result = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_id);
         iv_profile = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.iv_profile);
 
-        tv_result.setText(displayName);
-        Glide.with(MainActivity.this).load(uri).into(iv_profile);
+        tv_result.setText(user.getDisplayName());
+        Glide.with(MainActivity.this).load(user.getPhotoUrl()).into(iv_profile);
 
         toggleIsSignIn();
-    }
-
-    //after logout => push to load activity
-    private void resultLogout(){
-        Intent intent = new Intent(this, LoadActivity.class);
-        startActivity(intent);
-        finish();
     }
 
     //back button safety
@@ -193,7 +142,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     public void onBackPressed() {
         long curTime = System.currentTimeMillis();
         long gapTime = curTime - backBtnTime;
-
         if(0<= gapTime && 2000 >= gapTime){
             super.onBackPressed();
         }else{
@@ -232,16 +180,5 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
-    }
-
-    @Override
-    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-        if(firebaseAuth.getCurrentUser() == null){
-            Log.d("AUTH STATE", "null");
-//            startActivity(new Intent(this, LoadActivity.class));
-//            finish();
-            return;
-        }
-        Log.d("AUTH STATE", firebaseAuth.getUid());
     }
 }
