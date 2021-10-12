@@ -8,6 +8,7 @@
 
     <ImageView
         android:id="@+id/load_logo"
+        android:layout_marginTop="-70dp"
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

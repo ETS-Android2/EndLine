@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -26,6 +28,8 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+
 public class HealthFragment extends Fragment {
 
     private HealthViewModel healthViewModel;
@@ -33,6 +37,10 @@ public class HealthFragment extends Fragment {
     CollectionReference collectionReference = firestore.collection("mainData");
     Query query;
     FirebaseAuth user = FirebaseAuth.getInstance();
+
+    ListView lv_health;
+    ArrayAdapter adapter;
+    ArrayList listItem;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -47,6 +55,18 @@ public class HealthFragment extends Fragment {
             }
         });
 
+//        lv_health = (ListView) root.findViewById(R.id.list);
+//        listItem = new ArrayList();
+//
+//        adapter = new ArrayAdapter(getActivity(), R.layout.fragment_health, R.id.tv_healthItem, listItem);
+//        lv_health.setAdapter(adapter);
+
+        getData();
+
+        return root;
+    }
+
+    private void getData(){
         query = collectionReference.whereEqualTo("카테고리", "건강");
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -54,16 +74,13 @@ public class HealthFragment extends Fragment {
                 if(task.isSuccessful()){
                     for (QueryDocumentSnapshot document : task.getResult()){
                         Log.d("getData", document.getData().toString());
+//                        listItem.add(document.get("제품명"));
+//                        adapter.notifyDataSetChanged();
                     }
+                }else{
+                    Log.w("getData", "fail");
                 }
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w("getData", "fail");
-            }
         });
-
-        return root;
     }
 }

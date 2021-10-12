@@ -2,6 +2,7 @@ package com.example.endline_v1;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -36,6 +37,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -47,21 +49,20 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+import java.net.HttpURLConnection;
+
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, FirebaseAuth.AuthStateListener {
 
     private AppBarConfiguration mAppBarConfiguration;
-    private FirebaseAuth auth;                          //Auth
-    private GoogleApiClient googleApiClient;            //Google API Client
-    private static final int REQ_SIGN_GOOGLE = 100;     //Result Code of Google Login
+    private FirebaseAuth auth; //Auth
+    FirebaseUser user;
 
     private TextView tv_result;     //User ID
     private ImageView iv_profile;   //User Profile Photo
 
-    public static String sdisplayName = "";
+    public static String displayName = "";
     public static String profilePhotoUrl = "";
     public static boolean isLogin = false;
-
-    public Intent accountIntent;
 
     private long backBtnTime = 0;
 
@@ -71,6 +72,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        auth = FirebaseAuth.getInstance();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -94,69 +97,40 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
+        String token = FirebaseInstanceId.getInstance().getToken();
+        Log.d("TOKEN", token);
+        ConnectServerTask connectServerTask = new ConnectServerTask();
+        connectServerTask.execute("http://192.168.0.11:3000/register", token);
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        auth.addAuthStateListener(this);
+    }
 
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
-                .build();
+    @Override
+    protected void onStop() {
+        super.onStop();
+        auth.removeAuthStateListener(this);
+    }
 
-        accountIntent = getIntent();
-        auth = FirebaseAuth.getInstance();      //Get Auth Instance
-        FirebaseUser user =  auth.getCurrentUser();
-
-        //when user.getDisplayName get null, then connect string "" to error exception
-        Log.d("user info", user.getDisplayName() + "");
-        resultLogin(user);
+    @Override
+    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+        if(firebaseAuth.getCurrentUser() == null){      //non-Login
+            Log.d("AUTH STATE", "Main fail");
+            startActivity(new Intent(this, LoadActivity.class));
+            finish();
+        }else{      //login
+            Log.d("AUTH STATE", firebaseAuth.getUid());
+            resultLogin(firebaseAuth.getCurrentUser());
+        }
     }
 
     //change login state
     public boolean toggleIsSignIn(){
         isLogin = !isLogin;
         return isLogin;
-    }
-
-    public void OnFragmentChange(int index){
-        if(index == 1){
-            signOut();
-        }
-    }
-
-    private void signOut() {
-        googleApiClient.connect();
-        googleApiClient.registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
-            @Override
-            public void onConnected(@Nullable Bundle bundle) {
-                auth.signOut();
-                Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(@NonNull Status status) {
-                        if (status.isSuccess()){
-                            Log.v("LogOut Event", "Success");
-                            Toast.makeText(getApplicationContext(), "로그아웃성공", Toast.LENGTH_SHORT).show();
-                            resultLogout();
-                        }
-                        else{
-                            Log.v("LogOut Event", "Fail");
-                            Toast.makeText(getApplicationContext(), "로그아웃실패", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
-            @Override
-            public void onConnectionSuspended(int i) {
-                Log.v("LogOut Event", "Suspended");
-            }
-        });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
     //set user profile
@@ -170,19 +144,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         toggleIsSignIn();
     }
 
-    //after logout => push to load activity
-    private void resultLogout(){
-        Intent intent = new Intent(this, LoadActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
     //back button safety
     @Override
     public void onBackPressed() {
         long curTime = System.currentTimeMillis();
         long gapTime = curTime - backBtnTime;
-
         if(0<= gapTime && 2000 >= gapTime){
             super.onBackPressed();
         }else{

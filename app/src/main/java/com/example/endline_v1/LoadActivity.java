@@ -27,12 +27,17 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LoadActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
@@ -53,6 +58,9 @@ public class LoadActivity extends AppCompatActivity implements GoogleApiClient.O
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_load);
+
+        //firebase auth
+        auth = FirebaseAuth.getInstance();
 
         btn_login = (Button) findViewById(R.id.btn_login);
         btn_join = (Button) findViewById(R.id.btn_join);
@@ -102,22 +110,22 @@ public class LoadActivity extends AppCompatActivity implements GoogleApiClient.O
                 auth.signInWithEmailAndPassword(et_email.getText().toString(), et_password.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(intent);
-                        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                        finish();
+                        if(task.isSuccessful()){
+                            Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                            finish();
+                        }else if(task.isCanceled()){
+                            Toast.makeText(getApplicationContext(), "사용자 로그인 취소", Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
-                    }
-                }).addOnCanceledListener(new OnCanceledListener() {
-                    @Override
-                    public void onCanceled() {
-                        Toast.makeText(getApplicationContext(), "사용자 로그인 취소", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -148,9 +156,6 @@ public class LoadActivity extends AppCompatActivity implements GoogleApiClient.O
                         Manifest.permission.INTERNET,
                         Manifest.permission.ACCESS_NETWORK_STATE)
                 .check();
-
-        //firebase auth
-        auth = FirebaseAuth.getInstance();
 
         //google sign in option
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -197,18 +202,31 @@ public class LoadActivity extends AppCompatActivity implements GoogleApiClient.O
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if(result.isSuccess()){
                 GoogleSignInAccount account = result.getSignInAccount();
-                Log.d(TAG, "이름 ==> " + account.getDisplayName());
-                Toast.makeText(this,  account.getDisplayName().toString() + "님 환영합니다", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(this, MainActivity.class);
-                intent.putExtra("displayName", account.getDisplayName());
-                intent.putExtra("photoUrl", account.getPhotoUrl());
-                intent.putExtra("id", account.getId());
-                intent.putExtra("idToken", account.getIdToken());
-                startActivity(intent);
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                finish();
+                firebaseAuthWithGoogle(account);
             }
         }
+    }
+
+    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+        auth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithCredential:success");
+                            FirebaseUser user = auth.getCurrentUser();
+                            Toast.makeText(getApplicationContext(), "환영합니다", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                            finish();
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                        }
+                    }
+                });
     }
 
     @Override

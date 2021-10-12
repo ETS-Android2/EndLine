@@ -21,6 +21,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.annotation.GlideModule;
 import com.example.endline_v1.LoadActivity;
 import com.example.endline_v1.MainActivity;
 import com.example.endline_v1.R;
@@ -30,23 +31,20 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements FirebaseAuth.AuthStateListener {
 
     MainActivity mainActivity;
     private ProfileViewModel profileViewModel;
     Button btn_logout, btn_updateProfile;
     ImageView iv_profilePhoto;
     EditText et_displayName;
+    FirebaseAuth auth;
+    FirebaseUser user;
 
     @Override
     public void onAttach(@NonNull Activity activity) {
         super.onAttach(activity);
         mainActivity = (MainActivity) getActivity();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -62,26 +60,22 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        auth = FirebaseAuth.getInstance();
+        auth.addAuthStateListener(this);
+        user = auth.getCurrentUser();
+
         et_displayName = (EditText) root.findViewById(R.id.et_displayName);
+        iv_profilePhoto = (ImageView) root.findViewById(R.id.iv_profilePhoto);
         btn_updateProfile = (Button) root.findViewById(R.id.btn_updateProfile);
         btn_logout = (Button) root.findViewById(R.id.btn_logout);
-        if(!mainActivity.isLogin){  //none Login state
-            btn_logout.setVisibility(View.GONE);
-            et_displayName.setText("");
-        }else{  //login state
-            btn_logout.setVisibility(View.VISIBLE);
-            et_displayName.setText(mainActivity.sdisplayName);
-        }
+
+        et_displayName.setText(user.getDisplayName() + "");
+        Glide.with(mainActivity.getApplicationContext()).load(user.getPhotoUrl()).into(iv_profilePhoto);
+
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mainActivity.OnFragmentChange(1);
-                Toast.makeText(getActivity(), "로그아웃", Toast.LENGTH_SHORT).show();
-
-                Intent i = new Intent(getActivity(), LoadActivity.class);
-                startActivity(i);
-
-                et_displayName.setText("");
+                auth.signOut();
             }
         });
 
@@ -106,9 +100,24 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-//        get profile photo url from mainActivity, but get null reference, why?
-//        Glide.with(mainActivity.getApplicationContext()).load(Uri.parse(mainActivity.profilePhotoUrl)).into(iv_profilePhoto);
-
         return root;
+    }
+
+    @Override
+    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+        if(firebaseAuth.getCurrentUser() == null){
+            Intent intent = new Intent(mainActivity.getApplicationContext(), LoadActivity.class);
+            startActivity(intent);
+            onDetach();
+            Log.d("USER", "Log out state");
+        }else{
+            Log.d("USER", firebaseAuth.getUid() + " : Login");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        auth.removeAuthStateListener(this);
     }
 }
