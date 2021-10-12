@@ -2,6 +2,7 @@ package com.example.endline_v1;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -47,6 +48,8 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import java.net.HttpURLConnection;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, FirebaseAuth.AuthStateListener {
 
@@ -96,7 +99,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         String token = FirebaseInstanceId.getInstance().getToken();
         Log.d("TOKEN", token);
-
+        ConnectServerTask connectServerTask = new ConnectServerTask();
+        connectServerTask.execute("http://192.168.0.11:3000/register", token);
     }
 
     @Override
