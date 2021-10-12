@@ -21,6 +21,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.annotation.GlideModule;
 import com.example.endline_v1.LoadActivity;
 import com.example.endline_v1.MainActivity;
 import com.example.endline_v1.R;
@@ -64,9 +65,13 @@ public class ProfileFragment extends Fragment implements FirebaseAuth.AuthStateL
         user = auth.getCurrentUser();
 
         et_displayName = (EditText) root.findViewById(R.id.et_displayName);
+        iv_profilePhoto = (ImageView) root.findViewById(R.id.iv_profilePhoto);
         btn_updateProfile = (Button) root.findViewById(R.id.btn_updateProfile);
         btn_logout = (Button) root.findViewById(R.id.btn_logout);
+
         et_displayName.setText(user.getDisplayName() + "");
+        Glide.with(mainActivity.getApplicationContext()).load(user.getPhotoUrl()).into(iv_profilePhoto);
+
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
