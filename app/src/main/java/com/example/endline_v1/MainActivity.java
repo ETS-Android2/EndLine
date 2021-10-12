@@ -93,13 +93,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        resultLogin();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        user = auth.getCurrentUser();
         auth.addAuthStateListener(this);
     }
 
@@ -111,13 +109,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     @Override
     public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-        if(firebaseAuth.getCurrentUser() == null){
+        if(firebaseAuth.getCurrentUser() == null){      //non-Login
             Log.d("AUTH STATE", "Main fail");
-//            startActivity(new Intent(this, LoadActivity.class));
-//            finish();
-            return;
+            startActivity(new Intent(this, LoadActivity.class));
+            finish();
+        }else{      //login
+            Log.d("AUTH STATE", firebaseAuth.getUid());
+            resultLogin(firebaseAuth.getCurrentUser());
         }
-        Log.d("AUTH STATE", firebaseAuth.getUid());
     }
 
     //change login state
@@ -127,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
     //set user profile
-    public void resultLogin() {
+    public void resultLogin(FirebaseUser user) {
         tv_result = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_id);
         iv_profile = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.iv_profile);
 

@@ -38,16 +38,12 @@ public class ProfileFragment extends Fragment implements FirebaseAuth.AuthStateL
     ImageView iv_profilePhoto;
     EditText et_displayName;
     FirebaseAuth auth;
+    FirebaseUser user;
 
     @Override
     public void onAttach(@NonNull Activity activity) {
         super.onAttach(activity);
         mainActivity = (MainActivity) getActivity();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -64,17 +60,13 @@ public class ProfileFragment extends Fragment implements FirebaseAuth.AuthStateL
         });
 
         auth = FirebaseAuth.getInstance();
+        auth.addAuthStateListener(this);
+        user = auth.getCurrentUser();
 
         et_displayName = (EditText) root.findViewById(R.id.et_displayName);
         btn_updateProfile = (Button) root.findViewById(R.id.btn_updateProfile);
         btn_logout = (Button) root.findViewById(R.id.btn_logout);
-        if(!mainActivity.isLogin){  //none Login state
-            btn_logout.setVisibility(View.GONE);
-            et_displayName.setText("");
-        }else{  //login state
-            btn_logout.setVisibility(View.VISIBLE);
-            et_displayName.setText(mainActivity.displayName);
-        }
+        et_displayName.setText(user.getDisplayName() + "");
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,7 +85,7 @@ public class ProfileFragment extends Fragment implements FirebaseAuth.AuthStateL
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
                             Toast.makeText(getActivity(), "변경되었습니다.", Toast.LENGTH_SHORT).show();
-                            mainActivity.resultLogin();
+                            mainActivity.resultLogin(user);
                             Log.d("UPDATE NAME", et_displayName.getText().toString());
                         }else{
                             Log.w("UPDATE NAME", "failed");
@@ -103,18 +95,24 @@ public class ProfileFragment extends Fragment implements FirebaseAuth.AuthStateL
             }
         });
 
-//        get profile photo url from mainActivity, but get null reference, why?
-//        Glide.with(mainActivity.getApplicationContext()).load(Uri.parse(mainActivity.profilePhotoUrl)).into(iv_profilePhoto);
-
         return root;
     }
 
     @Override
     public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
         if(firebaseAuth.getCurrentUser() == null){
-            Log.d("USER", "NULL ERROR");
+            Intent intent = new Intent(mainActivity.getApplicationContext(), LoadActivity.class);
+            startActivity(intent);
+            onDetach();
+            Log.d("USER", "Log out state");
         }else{
-            Log.d("USER", firebaseAuth.getUid());
+            Log.d("USER", firebaseAuth.getUid() + " : Login");
         }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        auth.removeAuthStateListener(this);
     }
 }
