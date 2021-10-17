@@ -3,6 +3,8 @@ package com.example.endline_v1;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -11,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +32,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -39,16 +43,17 @@ public class ScanBarCode extends AppCompatActivity {
 
     EditText et_barcode, et_productName, et_category, et_price, et_buyDay, et_endline;
     Button btn_buyDatePicker, btn_endLinePicker, btn_insertScan, btn_cancelScan;
+    ImageButton ibtn_selectPhoto;
     Spinner spinner;
     Map<String, Object> data = new HashMap<>();
     Calendar c = Calendar.getInstance();
+
+    static final int REQ_SELECT_PHOTO = 111;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanpage);
-        
-//        getSupportActionBar().setTitle("제품 입력");
 
         et_barcode = (EditText) findViewById(R.id.et_barcode);
         et_productName = (EditText) findViewById(R.id.et_productName);
@@ -60,6 +65,7 @@ public class ScanBarCode extends AppCompatActivity {
         btn_endLinePicker = (Button) findViewById(R.id.btn_endLinePicker);
         btn_insertScan = (Button) findViewById(R.id.btn_insertScan);
         btn_cancelScan = (Button) findViewById(R.id.btn_cancelScan);
+        ibtn_selectPhoto = (ImageButton) findViewById(R.id.ibtn_selectPhoto);
         spinner = (Spinner) findViewById(R.id.spinner);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -112,6 +118,15 @@ public class ScanBarCode extends AppCompatActivity {
 
         btn_buyDatePicker.setOnClickListener(showDatePicker);
         btn_endLinePicker.setOnClickListener(showDatePicker);
+        ibtn_selectPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent, REQ_SELECT_PHOTO);
+            }
+        });
         
         btn_insertScan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,9 +180,25 @@ public class ScanBarCode extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        et_barcode.setText("바코드 번호 : " + result.getContents());
-//        Toast.makeText(this, "ISBN : " + result.getContents(), Toast.LENGTH_LONG).show();
+        switch (requestCode){
+            case IntentIntegrator.REQUEST_CODE:
+                IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+                et_barcode.setText("바코드 번호 : " + result.getContents());
+                break;
+            case REQ_SELECT_PHOTO:
+                if(resultCode == RESULT_OK){
+                    try{
+                        InputStream inputStream = getContentResolver().openInputStream(data.getData());
+                        Bitmap img = BitmapFactory.decodeStream(inputStream);
+                        inputStream.close();
+
+                        ibtn_selectPhoto.setImageBitmap(img);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+                break;
+        }
     }
 
     @Override
