@@ -58,13 +58,15 @@ public class FirebaseMessagingServices extends FirebaseMessagingService {
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setSmallIcon(R.drawable.logo_v1)
                 .setContentTitle(title)
-                .setContentText(text)
+                .setContentText("유통기한 알림!!")
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
-                .setStyle(new NotificationCompat.BigPictureStyle()
-                    .bigPicture(imgBitmap)
-                        .setBigContentTitle(title)
-                        .setSummaryText("유통기한 임박 알림!!")
+                .setStyle(
+                        new NotificationCompat.BigTextStyle().setBigContentTitle(title).bigText(text).setSummaryText("유통기한 알림!!")
+//                        new NotificationCompat.BigPictureStyle()
+//                                .bigPicture(imgBitmap)
+//                                .setBigContentTitle(title)
+//                                .setSummaryText("유통기한 임박 알림!!")
                 )
                 .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
 
