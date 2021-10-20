@@ -83,14 +83,14 @@ public class ScanBarCode extends AppCompatActivity {
         DatePickerDialog.OnDateSetListener buyDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                et_buyDay.setText(year + "-" + month + "-" + dayOfMonth);
+                et_buyDay.setText(year + "-" + (month+1) + "-" + dayOfMonth);
             }
         };
 
         DatePickerDialog.OnDateSetListener endLineDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                et_endline.setText(year + "-" + month + "-" + dayOfMonth);
+                et_endline.setText(year + "-" + (month+1) + "-" + dayOfMonth);
             }
         };
 
