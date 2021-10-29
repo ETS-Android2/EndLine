@@ -51,6 +51,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import java.net.HttpURLConnection;
 
+//prepare merge dev branch at 2021-10-29 22:35:24
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, FirebaseAuth.AuthStateListener {
 
     private AppBarConfiguration mAppBarConfiguration;
