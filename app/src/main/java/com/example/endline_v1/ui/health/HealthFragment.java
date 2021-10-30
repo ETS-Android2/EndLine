@@ -55,11 +55,11 @@ public class HealthFragment extends Fragment {
             }
         });
 
-//        lv_health = (ListView) root.findViewById(R.id.list);
-//        listItem = new ArrayList();
-//
-//        adapter = new ArrayAdapter(getActivity(), R.layout.fragment_health, R.id.tv_healthItem, listItem);
-//        lv_health.setAdapter(adapter);
+        TextView listtv = (TextView) root.findViewById(R.id.listtv);
+        String[] values = new String[] {"hello", "my name is", "fine"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.fragment_health, R.id.listtv, values);
+        ListView lv = (ListView) root.findViewById(R.id.list);
+        lv.setAdapter(adapter);
 
         getData();
 
