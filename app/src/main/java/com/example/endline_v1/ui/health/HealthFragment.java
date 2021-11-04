@@ -12,22 +12,18 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.endline_v1.DisplayDataFromFirebase;
-import com.example.endline_v1.ItemDataSet;
-import com.example.endline_v1.ItemRecyclerAdapter;
 import com.example.endline_v1.R;
-
-import java.util.ArrayList;
 
 public class HealthFragment extends Fragment {
 
     private HealthViewModel healthViewModel;
     private RecyclerView recyclerView;
-    private Activity mainActivity;
+    private Activity activity;
 
     @Override
     public void onAttach(@NonNull Activity activity) {
         super.onAttach(activity);
-        this.mainActivity = activity;
+        this.activity = activity;
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -44,7 +40,7 @@ public class HealthFragment extends Fragment {
 //        });
 
         recyclerView = (RecyclerView) root.findViewById(R.id.recyclerView_health);
-        DisplayDataFromFirebase displayer = new DisplayDataFromFirebase("건강", recyclerView, mainActivity.getApplicationContext());
+        DisplayDataFromFirebase displayer = new DisplayDataFromFirebase("건강", recyclerView, activity.getApplicationContext());
         displayer.DisplayData();
 
         return root;
