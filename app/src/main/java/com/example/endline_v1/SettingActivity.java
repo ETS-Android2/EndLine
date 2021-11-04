@@ -3,7 +3,6 @@ package com.example.endline_v1;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,14 +11,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.endline_v1.ui.health.RecyclerAdapter;
-
 import java.util.ArrayList;
 
 public class SettingActivity extends AppCompatActivity {
 
     private ArrayList<DataSet> list;
-    private RecyclerAdapter adapter;
+    private SettingRecyclerAdapter adapter;
     private RecyclerView recyclerView;
     private Button btn_add, btn_clear;
 
@@ -35,7 +32,7 @@ public class SettingActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         list = new ArrayList<>();
-        adapter = new RecyclerAdapter(list);
+        adapter = new SettingRecyclerAdapter(list);
         recyclerView.setAdapter(adapter);
 
         btn_add = (Button) findViewById(R.id.btn_itemadd);
