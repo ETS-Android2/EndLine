@@ -20,7 +20,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
     private ArrayList<ItemDataSet> list;
     private Context context;
 
-    ItemRecyclerAdapter(ArrayList<ItemDataSet> list){
+    public ItemRecyclerAdapter(ArrayList<ItemDataSet> list){
         this.list = list;
     }
 
