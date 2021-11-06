@@ -37,7 +37,7 @@
             android:hint="바코드 번호" />
 
         <EditText
-            android:id="@+id/et_productName"
+            android:id="@+id/et_product_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
@@ -45,6 +45,16 @@
             android:drawableLeft="@drawable/ic_baseline_drive_file_rename_outline_24"
             android:drawablePadding="10dp"
             android:hint="제품명" />
+
+        <EditText
+            android:id="@+id/et_brand"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/ic_baseline_house_24"
+            android:drawablePadding="10dp"
+            android:hint="제조사" />
 
         <Spinner
             android:id="@+id/spinner"

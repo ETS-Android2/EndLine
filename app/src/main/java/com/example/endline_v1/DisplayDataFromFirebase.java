@@ -64,24 +64,24 @@ public class DisplayDataFromFirebase {
         if(category == "All"){
             query = collectionReference.whereEqualTo("UID", user.getUid());
         }else if(category == "search"){
-            query = collectionReference.whereEqualTo("UID", user.getUid()).whereEqualTo("제품명", product_name);
+            query = collectionReference.whereEqualTo("UID", user.getUid()).whereEqualTo("product_name", product_name);
         }
         else{
-            query = collectionReference.whereEqualTo("카테고리", category).whereEqualTo("UID", user.getUid());
+            query = collectionReference.whereEqualTo("category", category).whereEqualTo("UID", user.getUid());
         }
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){
                     for (QueryDocumentSnapshot document : task.getResult()){
-                        if(document.exists()){
+                        if(document.get("product_name") != null){
                             Log.d("getData", document.getData().toString());
                             ItemDataSet itemDataSet = new ItemDataSet(
-                                    document.get("제품명").toString(),
-                                    document.get("카테고리").toString(),
-                                    document.get("구매 일자").toString(),
-                                    document.get("유통 기한").toString(),
-                                    document.get("이미지").toString()
+                                    document.get("product_name").toString(),
+                                    document.get("category").toString(),
+                                    document.get("buy_date").toString(),
+                                    document.get("end_line").toString(),
+                                    document.get("img").toString()
                             );
                             list.add(itemDataSet);
                             adapter.notifyDataSetChanged();

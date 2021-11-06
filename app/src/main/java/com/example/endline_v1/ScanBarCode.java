@@ -52,7 +52,7 @@ import java.util.UUID;
 
 public class ScanBarCode extends AppCompatActivity {
 
-    EditText et_barcode, et_productName, et_category, et_price, et_buyDay, et_endline;
+    EditText et_barcode, et_product_name, et_category, et_price, et_buyDay, et_endline, et_brand;
     Button btn_buyDatePicker, btn_endLinePicker, btn_insertScan, btn_cancelScan;
     ImageButton ibtn_selectPhoto;
     Spinner spinner;
@@ -75,11 +75,12 @@ public class ScanBarCode extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         et_barcode = (EditText) findViewById(R.id.et_barcode);
-        et_productName = (EditText) findViewById(R.id.et_productName);
+        et_product_name = (EditText) findViewById(R.id.et_product_name);
         et_price = (EditText) findViewById(R.id.et_price);
         et_category = (EditText) findViewById(R.id.et_category);
         et_buyDay = (EditText) findViewById(R.id.et_buyDay);
         et_endline = (EditText) findViewById(R.id.et_endline);
+        et_brand = (EditText) findViewById(R.id.et_brand);
         btn_buyDatePicker = (Button) findViewById(R.id.btn_buyDatePicker);
         btn_endLinePicker = (Button) findViewById(R.id.btn_endLinePicker);
         btn_insertScan = (Button) findViewById(R.id.btn_insertScan);
@@ -164,16 +165,18 @@ public class ScanBarCode extends AppCompatActivity {
                                         if(task.isSuccessful()){
                                             FirebaseFirestore firestore = FirebaseFirestore.getInstance();
                                             FirebaseAuth user = FirebaseAuth.getInstance();
-//                                            Toast.makeText(getApplicationContext(), user.getUid(), Toast.LENGTH_SHORT).show();
                                             data.put("UID", user.getUid());
-                                            data.put("바코드 번호", et_barcode.getText().toString().substring(9));
-                                            data.put("등록 일자", getTime());
-                                            data.put("제품명", et_productName.getText().toString());
-                                            data.put("이미지", task.getResult().toString());
-                                            data.put("카테고리", et_category.getText().toString());
-                                            data.put("가격", et_price.getText().toString());
-                                            data.put("구매 일자", et_buyDay.getText().toString());
-                                            data.put("유통 기한", et_endline.getText().toString());
+                                            data.put("barcode", et_barcode.getText().toString().substring(9));
+                                            data.put("register_date", getTime());
+                                            data.put("product_name", et_product_name.getText().toString());
+                                            data.put("brand", et_brand.getText().toString());
+                                            data.put("img", task.getResult().toString());
+                                            data.put("category", et_category.getText().toString());
+                                            data.put("price", et_price.getText().toString());
+                                            data.put("buy_date", et_buyDay.getText().toString());
+                                            data.put("end_line", et_endline.getText().toString());
+                                            data.put("register_date", getTime());
+                                            data.put("use_state", "false");
                                             firestore.collection("mainData").add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                 @Override
                                                 public void onSuccess(DocumentReference documentReference) {
