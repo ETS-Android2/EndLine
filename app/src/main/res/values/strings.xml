@@ -13,6 +13,9 @@
 
     <!-- Add Custom Menu-->
     <string name="menu_profile">Profile</string>
+    <string name="menu_barcode_scan">Barcode Scan</string>
+    <string name="menu_enter_number">Enter Number</string>
+    <string name="menu_directly_add">Directly Add</string>
     <string name="menu_beauty">Beauty</string>
     <string name="menu_medical">Medical</string>
     <string name="menu_food">Food</string>
