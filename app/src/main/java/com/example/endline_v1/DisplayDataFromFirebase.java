@@ -54,7 +54,11 @@ public class DisplayDataFromFirebase {
 
     private void getData() {
         Log.d("UID", user.getUid());
-        query = collectionReference.whereEqualTo("카테고리", category).whereEqualTo("UID", user.getUid());
+        if(category == "All"){
+            query = collectionReference.whereEqualTo("UID", user.getUid());
+        }else{
+            query = collectionReference.whereEqualTo("카테고리", category).whereEqualTo("UID", user.getUid());
+        }
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
