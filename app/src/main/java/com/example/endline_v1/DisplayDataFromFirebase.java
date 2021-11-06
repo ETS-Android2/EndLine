@@ -31,12 +31,19 @@ public class DisplayDataFromFirebase {
     private ArrayList<ItemDataSet> list;
     private RecyclerView recyclerView;
     private ItemRecyclerAdapter adapter;
-    private String category;
+    private String category, product_name;
 
     public DisplayDataFromFirebase(String category,RecyclerView recyclerView, Context context) {
         this.recyclerView = recyclerView;
         this.context = context;
         this.category = category;
+    }
+
+    public DisplayDataFromFirebase(String category, RecyclerView recyclerView, Context context, String product_name){
+        this.recyclerView = recyclerView;
+        this.context = context;
+        this.category = category;
+        this.product_name = product_name;
     }
 
     public void DisplayData(){
@@ -56,7 +63,10 @@ public class DisplayDataFromFirebase {
         Log.d("UID", user.getUid());
         if(category == "All"){
             query = collectionReference.whereEqualTo("UID", user.getUid());
-        }else{
+        }else if(category == "search"){
+            query = collectionReference.whereEqualTo("UID", user.getUid()).whereEqualTo("제품명", product_name);
+        }
+        else{
             query = collectionReference.whereEqualTo("카테고리", category).whereEqualTo("UID", user.getUid());
         }
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

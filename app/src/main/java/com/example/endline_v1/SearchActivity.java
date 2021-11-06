@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,11 +13,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.SearchView;
 
+import java.util.ArrayList;
+
 public class SearchActivity extends AppCompatActivity {
 
     SearchView searchView;
     Toolbar toolbar;
     MenuItem menuItem;
+    RecyclerView recyclerView;
+    ItemRecyclerAdapter adapter;
+    ArrayList<ItemDataSet> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +35,11 @@ public class SearchActivity extends AppCompatActivity {
         actionBar.setTitle("검색");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-//        searchView = (SearchView) findViewById(R.id.);
-//        searchView.setIconifiedByDefault(false);    //auto focus to search view
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView_search);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        list = new ArrayList<>();
+        adapter = new ItemRecyclerAdapter(list);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -39,7 +49,23 @@ public class SearchActivity extends AppCompatActivity {
         searchView = (SearchView) menu.findItem(R.id.action_searchview).getActionView();
         searchView.setIconifiedByDefault(false);
         searchView.setIconified(false);
-        searchView.setQueryHint("검색");
+        searchView.setMaxWidth(10000);     //not working why?
+        searchView.setQueryHint("제품명으로 검색");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                DisplayDataFromFirebase displayer = new DisplayDataFromFirebase("search", recyclerView, getApplicationContext(), query);
+                displayer.DisplayData();
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
 
         return super.onCreateOptionsMenu(menu);
     }
