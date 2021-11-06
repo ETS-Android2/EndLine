@@ -185,6 +185,8 @@ public class ScanBarCode extends AppCompatActivity {
                                                     Log.w("firestore input", "write data fail");
                                                 }
                                             });
+                                            finish();
+                                            Toast.makeText(getApplicationContext(), "입력 완료", Toast.LENGTH_SHORT).show();
                                         }else{
                                             Log.w("put Img", "fail");
                                         }
@@ -195,9 +197,9 @@ public class ScanBarCode extends AppCompatActivity {
                             }
                         }
                     });
+                }else{
+                    Toast.makeText(getApplicationContext(), "이미지를 선택해주세요.", Toast.LENGTH_SHORT).show();
                 }
-                finish();
-                Toast.makeText(getApplicationContext(), "입력 완료", Toast.LENGTH_SHORT).show();
             }
         });
         
