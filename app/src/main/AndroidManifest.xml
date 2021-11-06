@@ -17,7 +17,11 @@
         android:roundIcon="@mipmap/ic_launcher_endline_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.EndLine_v1.NoActionBar">
-        <activity android:name=".EnterNumber" android:parentActivityName=".MainActivity" android:theme="@style/Theme.EndLine_v1"></activity>
+        <activity android:name=".ItemInfo" android:theme="@style/Theme.EndLine_v1" android:parentActivityName=".MainActivity"></activity>
+        <activity
+            android:name=".EnterNumber"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.EndLine_v1" />
         <activity
             android:name=".SearchActivity"
             android:parentActivityName=".MainActivity"
