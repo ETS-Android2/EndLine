@@ -4,9 +4,7 @@
     <!-- Related Internet Permission -->
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <!-- Related Camera Permission -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Related Camera Permission -->
     <uses-permission android:name="android.permission.CAMERA" />
 
     <uses-feature android:name="android.hardware.camera2" /> <!-- Related Storage Permission -->
@@ -19,11 +17,15 @@
         android:roundIcon="@mipmap/ic_launcher_endline_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.EndLine_v1.NoActionBar">
+        <activity android:name=".EnterNumber" android:parentActivityName=".MainActivity" android:theme="@style/Theme.EndLine_v1"></activity>
         <activity
             android:name=".SearchActivity"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/Theme.EndLine_v1.NoActionBar"/>
-        <activity android:name=".SettingActivity" android:theme="@style/Theme.EndLine_v1" android:parentActivityName=".MainActivity" />
+            android:theme="@style/Theme.EndLine_v1.NoActionBar" />
+        <activity
+            android:name=".SettingActivity"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.EndLine_v1" />
         <activity
             android:name=".LoadActivity"
             android:label="@string/app_name"
@@ -34,26 +36,32 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ScanBarCode" android:theme="@style/Theme.EndLine_v1" android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".ScanBarCode"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.EndLine_v1" />
         <activity
             android:name=".MainActivity"
             android:theme="@style/Theme.EndLine_v1.NoActionBar" />
+
         <service android:name=".FirebaseInstanceServices">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <service
-            android:name=".FirebaseMessagingServices">
+        <service android:name=".FirebaseMessagingServices">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/logo_v1" />
-        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <!--
+ Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/white" />
