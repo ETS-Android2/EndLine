@@ -1,14 +1,17 @@
 package com.example.endline_v1;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -60,6 +63,15 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
             this.tv_rv_name = (TextView) view.findViewById(R.id.tv_rv_product_name);
             this.tv_rv_category = (TextView) view.findViewById(R.id.tv_rv_product_category);
             this.tv_rv_date = (TextView) view.findViewById(R.id.tv_rv_product_date);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, ItemInfo.class);
+                    intent.putExtra("product_name", tv_rv_name.getText());
+                    context.startActivity(intent);
+//                    Toast.makeText(context, tv_rv_name.getText().toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 }
