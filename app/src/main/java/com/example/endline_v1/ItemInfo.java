@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -74,6 +75,20 @@ public class ItemInfo extends AppCompatActivity {
         collectionReference = firestore.collection("mainData");
 
         getData(product_name);
+    }
+
+    private View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.btn_info_delete:
+                    delete();
+            }
+        }
+    };
+
+    private void delete(){
+
     }
 
     private void getData(String product_name) {

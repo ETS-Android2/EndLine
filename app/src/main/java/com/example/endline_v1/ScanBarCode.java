@@ -29,13 +29,18 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -58,6 +63,9 @@ public class ScanBarCode extends AppCompatActivity {
     private Spinner spinner;
     private Map<String, Object> data = new HashMap<>();
     private Calendar c = Calendar.getInstance();
+    private FirebaseFirestore firestore;
+    private CollectionReference collectionReference;
+    private Query query;
     private FirebaseStorage storage;
     private StorageReference storageRef;
     private Uri imgUri;
@@ -232,6 +240,7 @@ public class ScanBarCode extends AppCompatActivity {
             case IntentIntegrator.REQUEST_CODE:
                 IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
                 et_barcode.setText("바코드 번호 : " + result.getContents());
+                getDataFormFirebase(result.getContents());
                 break;
             case REQ_SELECT_PHOTO:
                 if(resultCode == RESULT_OK){
@@ -248,6 +257,29 @@ public class ScanBarCode extends AppCompatActivity {
                 }
                 break;
         }
+    }
+
+    private void getDataFormFirebase(String barcode_number) {
+        firestore = FirebaseFirestore.getInstance();
+        collectionReference = firestore.collection("mainData");
+        query = collectionReference.whereEqualTo("barcode", barcode_number);
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    for (QueryDocumentSnapshot document : task.getResult()){
+                        Uri uri = Uri.parse(document.get("img").toString());
+                        Glide.with(getApplicationContext()).load(uri).into(ibtn_selectPhoto);
+                        et_brand.setText(document.get("brand").toString());
+                        et_category.setText(document.get("category").toString());
+                        et_product_name.setText(document.get("product_name").toString());
+                        et_price.setText(document.get("price").toString());
+                    }
+                }else{
+                    Toast.makeText(getApplicationContext(), "등록된 데이터가 없습니다.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Override
