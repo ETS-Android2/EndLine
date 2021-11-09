@@ -42,7 +42,7 @@
         tools:layout="@layout/activity_enter_number" />
     <activity
         android:id="@+id/nav_directly_add"
-        android:name="com.example.endline_v1.ScanBarCode"
+        android:name="com.example.endline_v1.DirectlyAdd"
         android:label="@string/menu_directly_add"
         tools:layout="@layout/activity_scanpage" />
 

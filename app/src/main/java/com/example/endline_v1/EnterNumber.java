@@ -35,8 +35,8 @@ public class EnterNumber extends AppCompatActivity {
         btn_enter_number.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ScanBarCode.class);
-                intent.putExtra("number", et_barcodeNum.getText());
+                Intent intent = new Intent(getApplicationContext(), DirectlyAdd.class);
+                intent.putExtra("barcode_number", et_barcodeNum.getText());
                 startActivity(intent);
                 finish();
             }

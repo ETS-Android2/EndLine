@@ -18,6 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EndLine_v1.NoActionBar">
         <activity android:name=".ItemInfo" android:theme="@style/Theme.EndLine_v1" android:parentActivityName=".MainActivity"></activity>
+        <activity android:name=".DirectlyAdd" android:parentActivityName=".MainActivity" android:theme="@style/Theme.EndLine_v1" />
         <activity
             android:name=".EnterNumber"
             android:parentActivityName=".MainActivity"
