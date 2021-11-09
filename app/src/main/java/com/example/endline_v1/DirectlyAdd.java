@@ -210,14 +210,11 @@ public class DirectlyAdd extends AppCompatActivity {
         });
 
         intent = getIntent();
-        if(intent.getStringExtra("barcode_number") != null){
+        if(intent.hasExtra("barcode_number")){
             barcode_number = intent.getStringExtra("barcode_number");
             et_barcode.setText(barcode_number);
-            Toast.makeText(this, intent.getStringExtra("barcode_number"), Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(this, "intent has null value", Toast.LENGTH_SHORT).show();
-//            new IntentIntegrator(this).initiateScan();
         }
+
     }
 
     private String getTime(){
@@ -232,10 +229,6 @@ public class DirectlyAdd extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode){
-            case IntentIntegrator.REQUEST_CODE:
-                IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-                et_barcode.setText("바코드 번호 : " + result.getContents());
-                break;
             case REQ_SELECT_PHOTO:
                 if(resultCode == RESULT_OK){
                     try{
