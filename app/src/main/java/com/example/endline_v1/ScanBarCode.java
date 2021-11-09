@@ -52,16 +52,16 @@ import java.util.UUID;
 
 public class ScanBarCode extends AppCompatActivity {
 
-    EditText et_barcode, et_product_name, et_category, et_price, et_buyDay, et_endline, et_brand;
-    Button btn_buyDatePicker, btn_endLinePicker, btn_insertScan, btn_cancelScan;
-    ImageButton ibtn_selectPhoto;
-    Spinner spinner;
-    Map<String, Object> data = new HashMap<>();
-    Calendar c = Calendar.getInstance();
-    FirebaseStorage storage;
-    StorageReference storageRef;
-    Uri imgUri;
-    String randomKey;
+    private EditText et_barcode, et_product_name, et_category, et_price, et_buyDay, et_endline, et_brand;
+    private Button btn_buyDatePicker, btn_endLinePicker, btn_insertScan, btn_cancelScan;
+    private ImageButton ibtn_selectPhoto;
+    private Spinner spinner;
+    private Map<String, Object> data = new HashMap<>();
+    private Calendar c = Calendar.getInstance();
+    private FirebaseStorage storage;
+    private StorageReference storageRef;
+    private Uri imgUri;
+    private String randomKey;
 
     static final int REQ_SELECT_PHOTO = 111;
 
