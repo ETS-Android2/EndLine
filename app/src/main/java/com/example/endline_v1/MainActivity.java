@@ -88,10 +88,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        //R.id.nav_gallery, R.id.nav_slideshow,
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_beauty, R.id.nav_food,
-                R.id.nav_health, R.id.nav_medical, R.id.nav_profile)
+                R.id.nav_health, R.id.nav_medical, R.id.nav_profile,
+                R.id.nav_barcodeScan, R.id.nav_enter_number, R.id.nav_directly_add)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);

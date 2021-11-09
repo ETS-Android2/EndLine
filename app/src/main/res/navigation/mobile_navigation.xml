@@ -29,6 +29,23 @@
         android:name="com.example.endline_v1.ui.login.ProfileFragment"
         android:label="@string/menu_profile"
         tools:layout="@layout/fragment_profile" />
+
+    <activity
+        android:id="@+id/nav_barcodeScan"
+        android:name="com.example.endline_v1.ScanBarCode"
+        android:label="@string/menu_barcode_scan"
+        tools:layout="@layout/activity_scanpage" />
+    <activity
+        android:id="@+id/nav_enter_number"
+        android:name="com.example.endline_v1.EnterNumber"
+        android:label="@string/menu_enter_number"
+        tools:layout="@layout/activity_enter_number" />
+    <activity
+        android:id="@+id/nav_directly_add"
+        android:name="com.example.endline_v1.DirectlyAdd"
+        android:label="@string/menu_directly_add"
+        tools:layout="@layout/activity_scanpage" />
+
     <fragment
         android:id="@+id/nav_beauty"
         android:name="com.example.endline_v1.ui.beauty.BeautyFragment"

@@ -1,6 +1,5 @@
 package com.example.endline_v1;
 
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,25 +8,19 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -55,7 +48,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class ScanBarCode extends AppCompatActivity {
+public class DirectlyAdd extends AppCompatActivity {
 
     private EditText et_barcode, et_product_name, et_category, et_price, et_buyDay, et_endline, et_brand;
     private Button btn_buyDatePicker, btn_endLinePicker, btn_insertScan, btn_cancelScan;
@@ -70,6 +63,8 @@ public class ScanBarCode extends AppCompatActivity {
     private StorageReference storageRef;
     private Uri imgUri;
     private String randomKey;
+    private Intent intent;
+    private String barcode_number;
 
     static final int REQ_SELECT_PHOTO = 111;
 
@@ -127,14 +122,14 @@ public class ScanBarCode extends AppCompatActivity {
             public void onClick(View v) {
                 if(v.getId() == R.id.btn_buyDatePicker){
                     new DatePickerDialog(
-                            ScanBarCode.this,
+                            DirectlyAdd.this,
                             buyDateSetListener,
                             c.get(Calendar.YEAR),
                             c.get(Calendar.MONTH),
                             c.get(Calendar.DAY_OF_MONTH)).show();
                 }else if(v.getId() == R.id.btn_endLinePicker){
                     new DatePickerDialog(
-                            ScanBarCode.this,
+                            DirectlyAdd.this,
                             endLineDateSetListener,
                             c.get(Calendar.YEAR),
                             c.get(Calendar.MONTH),
@@ -222,40 +217,11 @@ public class ScanBarCode extends AppCompatActivity {
             }
         });
 
-        new IntentIntegrator(this).initiateScan();
-    }
-
-    private String getTime(){
-        long now = System.currentTimeMillis();
-        Date date = new Date(now);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String getTime = dateFormat.format(date);
-        return getTime;
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode){
-            case IntentIntegrator.REQUEST_CODE:
-                IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-                et_barcode.setText("바코드 번호 : " + result.getContents());
-                getDataFormFirebase(result.getContents());
-                break;
-            case REQ_SELECT_PHOTO:
-                if(resultCode == RESULT_OK){
-                    try{
-                        InputStream inputStream = getContentResolver().openInputStream(data.getData());
-                        Bitmap img = BitmapFactory.decodeStream(inputStream);
-                        inputStream.close();
-
-                        ibtn_selectPhoto.setImageBitmap(img);
-                        imgUri = data.getData();
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-                }
-                break;
+        intent = getIntent();
+        if(intent.hasExtra("barcode_number")){
+            barcode_number = intent.getStringExtra("barcode_number");
+            et_barcode.setText(barcode_number);
+            getDataFormFirebase(barcode_number);
         }
     }
 
@@ -280,6 +246,35 @@ public class ScanBarCode extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private String getTime(){
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String getTime = dateFormat.format(date);
+        return getTime;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case REQ_SELECT_PHOTO:
+                if(resultCode == RESULT_OK){
+                    try{
+                        InputStream inputStream = getContentResolver().openInputStream(data.getData());
+                        Bitmap img = BitmapFactory.decodeStream(inputStream);
+                        inputStream.close();
+
+                        ibtn_selectPhoto.setImageBitmap(img);
+                        imgUri = data.getData();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+                break;
+        }
     }
 
     @Override

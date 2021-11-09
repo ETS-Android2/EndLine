@@ -3,40 +3,53 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="@string/menu_home" />
-        <!--<item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/menu_gallery" />
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="@string/menu_home" />
+    <!--<item
+           android:id="@+id/nav_gallery"
+           android:icon="@drawable/ic_menu_gallery"
+           android:title="@string/menu_gallery" />
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/menu_slideshow" />-->
 
-        <!-- Add Custom Menu-->
+    <!-- Add Custom Menu-->
+    <item
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/ic_baseline_supervised_user_circle_24"
+        android:title="@string/menu_profile" />
+    <group android:id="@+id/menu_scan">
         <item
-            android:id="@+id/nav_profile"
-            android:icon="@drawable/ic_baseline_supervised_user_circle_24"
-            android:title="@string/menu_profile" />
+            android:id="@+id/nav_barcodeScan"
+            android:icon="@drawable/ic_baseline_qr_code_scanner_24"
+            android:title="@string/menu_barcode_scan"/>
         <item
-            android:id="@+id/nav_beauty"
-            android:icon="@drawable/ic_baseline_clean_hands_24"
-            android:title="@string/menu_beauty" />
+            android:id="@+id/nav_enter_number"
+            android:icon="@drawable/ic_baseline_confirmation_number_24"
+            android:title="@string/menu_enter_number"/>
         <item
-            android:id="@+id/nav_food"
-            android:icon="@drawable/ic_baseline_food_bank_24"
-            android:title="@string/menu_food" />
-        <item
-            android:id="@+id/nav_health"
-            android:icon="@drawable/ic_baseline_nature_people_24"
-            android:title="@string/menu_health" />
-        <item
-            android:id="@+id/nav_medical"
-            android:icon="@drawable/ic_baseline_medical_services_24"
-            android:title="@string/menu_medical" />
+            android:id="@+id/nav_directly_add"
+            android:icon="@drawable/ic_baseline_library_add_24"
+            android:title="@string/menu_directly_add"/>
     </group>
+
+    <item
+        android:id="@+id/nav_beauty"
+        android:icon="@drawable/ic_baseline_clean_hands_24"
+        android:title="@string/menu_beauty" />
+    <item
+        android:id="@+id/nav_food"
+        android:icon="@drawable/ic_baseline_food_bank_24"
+        android:title="@string/menu_food" />
+    <item
+        android:id="@+id/nav_health"
+        android:icon="@drawable/ic_baseline_nature_people_24"
+        android:title="@string/menu_health" />
+    <item
+        android:id="@+id/nav_medical"
+        android:icon="@drawable/ic_baseline_medical_services_24"
+        android:title="@string/menu_medical" />
 </menu>
