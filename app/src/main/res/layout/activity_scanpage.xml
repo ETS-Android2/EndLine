@@ -68,6 +68,10 @@
             android:id="@+id/et_category"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:drawableLeft="@drawable/ic_baseline_category_24"
+            android:drawablePadding="10dp"
+            android:layout_weight="1"
+            android:enabled="false"
             android:hint="카테고리"
             android:visibility="gone" />
 
