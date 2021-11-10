@@ -263,7 +263,9 @@ public class LoadActivity extends AppCompatActivity implements GoogleApiClient.O
                             finish();
                         } else {
                             // If sign in fails, display a message to the user.
+                            progressDialog.dismiss();
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
