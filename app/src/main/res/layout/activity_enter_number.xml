@@ -44,6 +44,9 @@
             android:id="@+id/et_barcodeNum"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="number"
+            android:digits="0123456789"
+            android:maxLength="13"
             android:layout_marginTop="30dp"
             android:hint=" 바코드 번호를 입력해주세요."
             android:textSize="20dp" />
