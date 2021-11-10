@@ -40,6 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:maxLength="25"
             android:drawableLeft="@drawable/ic_baseline_drive_file_rename_outline_24"
             android:drawablePadding="10dp"
             android:hint="제품명" />
@@ -49,6 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:maxLength="25"
             android:drawableLeft="@drawable/ic_baseline_house_24"
             android:drawablePadding="10dp"
             android:hint="제조사" />
@@ -74,6 +76,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:maxLength="25"
+            android:inputType="number"
+            android:digits="0123456789"
             android:drawableLeft="@drawable/ic_baseline_monetization_on_24"
             android:drawablePadding="10dp"
             android:hint="가격" />
