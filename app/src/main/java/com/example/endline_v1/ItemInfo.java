@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +29,9 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ItemInfo extends AppCompatActivity {
 
     private Intent intent_info;
@@ -41,11 +45,15 @@ public class ItemInfo extends AppCompatActivity {
     private String docId;
 
     private TextView
-            tv_info_product_name, tv_info_category, tv_info_register_date,
-            tv_info_barcode, tv_info_brand, tv_info_price, tv_info_buy_date, tv_info_endline;
+            tv_info_category, tv_info_register_date,
+            tv_info_barcode, tv_info_brand;
+    private EditText et_info_product_name, et_info_price, et_info_buy_date, et_info_endline;
     private ImageView iv_info_img;
     private Button btn_info_update, btn_info_delete;
     private ToggleButton toggleButton;
+    private boolean updateState = false;
+
+    private static final int REQ_UPDATE = 177;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,14 +65,14 @@ public class ItemInfo extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         iv_info_img = (ImageView) findViewById(R.id.iv_info_img);
-        tv_info_product_name = (TextView) findViewById(R.id.tv_info_product_name);
+        et_info_product_name = (EditText) findViewById(R.id.et_info_product_name);
         tv_info_category = (TextView) findViewById(R.id.tv_info_category);
         tv_info_register_date = (TextView) findViewById(R.id.tv_info_register_Day);
         tv_info_barcode = (TextView) findViewById(R.id.tv_info_barcode);
         tv_info_brand = (TextView)findViewById(R.id.tv_info_brand);
-        tv_info_price = (TextView) findViewById(R.id.tv_info_price);
-        tv_info_buy_date = (TextView) findViewById(R.id.tv_info_buyDay);
-        tv_info_endline = (TextView) findViewById(R.id.tv_info_endline);
+        et_info_price = (EditText) findViewById(R.id.et_info_price);
+        et_info_buy_date = (EditText) findViewById(R.id.et_info_buyDay);
+        et_info_endline = (EditText) findViewById(R.id.et_info_endline);
         btn_info_update = (Button) findViewById(R.id.btn_info_update);
         btn_info_delete = (Button) findViewById(R.id.btn_info_delete);
         toggleButton = (ToggleButton) findViewById(R.id.toggleButton);
@@ -111,14 +119,49 @@ public class ItemInfo extends AppCompatActivity {
                     delete(docId);
                     break;
                 case R.id.btn_info_update:
-                    update(docId);
+                    updateState = !updateState;
+                    if(updateState){
+                        btn_info_update.setText("저장");
+                    }else{
+                        update(docId);
+                        btn_info_update.setText("수정");
+                    }
+                    ChangeMode();
                     break;
             }
         }
     };
 
     private void update(String docId) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("product_name", et_info_product_name.getText().toString());
+        data.put("buy_date", et_info_buy_date.getText().toString());
+        data.put("end_line", et_info_endline.getText().toString());
+        data.put("price", et_info_price.getText().toString());
+        firestore.document("mainData/" + docId).update(data).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    Toast.makeText(getApplicationContext(), "수정되었습니다!", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getApplicationContext(), "수정실패! 다음에 다시 시도해주세요", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
 
+    private void ChangeMode() {
+        if(updateState){
+            et_info_product_name.setEnabled(true);
+            et_info_buy_date.setEnabled(true);
+            et_info_endline.setEnabled(true);
+            et_info_price.setEnabled(true);
+        }else{
+            et_info_product_name.setEnabled(false);
+            et_info_buy_date.setEnabled(false);
+            et_info_endline.setEnabled(false);
+            et_info_price.setEnabled(false);
+        }
     }
 
     private void delete(String docId){
@@ -166,13 +209,13 @@ public class ItemInfo extends AppCompatActivity {
             toggleButton.setChecked(false);
         }
 
-        tv_info_product_name.setText(document.get("product_name").toString());
+        et_info_product_name.setText(document.get("product_name").toString());
         tv_info_category.setText(document.get("category").toString());
         tv_info_register_date.setText(document.get("register_date").toString());
         tv_info_barcode.setText(document.get("barcode").toString());
         tv_info_brand.setText(document.get("brand").toString());
-        tv_info_price.setText(document.get("price").toString());
-        tv_info_buy_date.setText(document.get("buy_date").toString());
-        tv_info_endline.setText(document.get("end_line").toString());
+        et_info_price.setText(document.get("price").toString());
+        et_info_buy_date.setText(document.get("buy_date").toString());
+        et_info_endline.setText(document.get("end_line").toString());
     }
 }
