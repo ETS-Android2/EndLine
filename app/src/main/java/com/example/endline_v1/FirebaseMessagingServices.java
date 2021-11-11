@@ -37,7 +37,7 @@ public class FirebaseMessagingServices extends FirebaseMessagingService {
             e.printStackTrace();
         }
 
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, SettingActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         createNotificationChannel("FCM", "FCM channel", NotificationManager.IMPORTANCE_HIGH);
