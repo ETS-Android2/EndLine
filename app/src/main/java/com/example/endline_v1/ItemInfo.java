@@ -10,9 +10,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -36,12 +38,14 @@ public class ItemInfo extends AppCompatActivity {
     private FirebaseAuth auth;
     private FirebaseUser user;
     private String product_name;
+    private String docId;
 
     private TextView
             tv_info_product_name, tv_info_category, tv_info_register_date,
             tv_info_barcode, tv_info_brand, tv_info_price, tv_info_buy_date, tv_info_endline;
     private ImageView iv_info_img;
-    private Button btn_info_update, btn_info_delete, btn_info_use, btn_info_not_use;
+    private Button btn_info_update, btn_info_delete;
+    private ToggleButton toggleButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +67,7 @@ public class ItemInfo extends AppCompatActivity {
         tv_info_endline = (TextView) findViewById(R.id.tv_info_endline);
         btn_info_update = (Button) findViewById(R.id.btn_info_update);
         btn_info_delete = (Button) findViewById(R.id.btn_info_delete);
-        btn_info_use = (Button) findViewById(R.id.btn_info_use);
-        btn_info_not_use = (Button)findViewById(R.id.btn_info_not_use);
+        toggleButton = (ToggleButton) findViewById(R.id.toggleButton);
 
         intent_info = getIntent();
         product_name = intent_info.getStringExtra("product_name");
@@ -75,6 +78,29 @@ public class ItemInfo extends AppCompatActivity {
         collectionReference = firestore.collection("mainData");
 
         getData(product_name);
+
+        btn_info_delete.setOnClickListener(this.onClickListener);
+        btn_info_update.setOnClickListener(this.onClickListener);
+
+        toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                updateUseState(isChecked, docId);
+            }
+        });
+    }
+
+    private void updateUseState(boolean isChecked, String docId) {
+        if(docId != null){
+            firestore.document("mainData/" + docId).update("use", isChecked + "").addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful()){
+                        Toast.makeText(getApplicationContext(), toggleButton.getText().toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
     }
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -82,22 +108,44 @@ public class ItemInfo extends AppCompatActivity {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.btn_info_delete:
-                    delete();
+                    delete(docId);
+                    break;
+                case R.id.btn_info_update:
+                    update(docId);
+                    break;
             }
         }
     };
 
-    private void delete(){
+    private void update(String docId) {
 
     }
 
+    private void delete(String docId){
+        firestore.document("mainData/" + docId).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    Toast.makeText(getApplicationContext(), "삭제완료!", Toast.LENGTH_SHORT).show();
+                    finish();
+                }else{
+                    Toast.makeText(getApplicationContext(), "삭제실패, 다음에 다시 시도해주세요", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
     private void getData(String product_name) {
-        query = collectionReference.whereEqualTo("UID", user.getUid()).whereEqualTo("product_name", product_name);
+        query = collectionReference
+                .whereEqualTo("UID", user.getUid())
+                .whereEqualTo("product_name", product_name);
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){
                     for(QueryDocumentSnapshot document : task.getResult()){
+                        docId = document.getId();
+                        Log.d("DocID", docId);
                         displayData(document);
                         Log.d("DOCUMENT", document.toString());
                     }
@@ -111,6 +159,12 @@ public class ItemInfo extends AppCompatActivity {
     private void displayData(QueryDocumentSnapshot document){
         Uri uri = Uri.parse(document.get("img").toString());
         Glide.with(this).load(uri).into(iv_info_img);
+
+        if(document.get("use_state").toString() == "false"){
+            toggleButton.setChecked(true);
+        }else{
+            toggleButton.setChecked(false);
+        }
 
         tv_info_product_name.setText(document.get("product_name").toString());
         tv_info_category.setText(document.get("category").toString());
