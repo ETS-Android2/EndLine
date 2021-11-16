@@ -55,12 +55,13 @@ public class HomeFragment extends Fragment {
         cv_medical = (CardView) root.findViewById(R.id.cv_medical);
         cv_food = (CardView) root.findViewById(R.id.cv_food);
         cv_beauty = (CardView) root.findViewById(R.id.cv_beauty);
+        cv_health = (CardView) root.findViewById(R.id.cv_health);
 
         cv_all.setOnClickListener(listener);
         cv_beauty.setOnClickListener(listener);
         cv_medical.setOnClickListener(listener);
         cv_food.setOnClickListener(listener);
-        cv_food.setOnClickListener(listener);
+        cv_health.setOnClickListener(listener);
 
         return root;
     }
