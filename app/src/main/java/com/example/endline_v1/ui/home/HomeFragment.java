@@ -43,9 +43,9 @@ public class HomeFragment extends Fragment {
 //            }
 //        });
 
-        recyclerView = (RecyclerView) root.findViewById(R.id.recyclerView_home);
-        displayer = new DisplayDataFromFirebase("All", recyclerView, activity.getApplicationContext());
-        displayer.DisplayData();
+//        recyclerView = (RecyclerView) root.findViewById(R.id.recyclerView_home);
+//        displayer = new DisplayDataFromFirebase("All", recyclerView, activity.getApplicationContext());
+//        displayer.DisplayData();
 
         return root;
     }
