@@ -62,7 +62,7 @@
             android:layout_weight="1"
             android:autofillHints="카테고리"
             android:background="@drawable/style_bottom_border"
-            android:entries="@array/spiner_item" />
+            android:entries="@array/scan_spinner_item" />
 
         <EditText
             android:id="@+id/et_category"
