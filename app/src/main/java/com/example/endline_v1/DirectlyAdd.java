@@ -288,7 +288,6 @@ public class DirectlyAdd extends AppCompatActivity {
                                 data.put("price", et_price.getText().toString());
                                 data.put("buy_date", et_buyDay.getText().toString());
                                 data.put("end_line", et_endline.getText().toString());
-                                data.put("register_date", getTime());
                                 data.put("use_state", "false");
                                 firestore.collection("mainData").add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                     @Override
