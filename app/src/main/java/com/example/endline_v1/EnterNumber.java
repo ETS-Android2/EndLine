@@ -29,7 +29,6 @@ public class EnterNumber extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         et_barcodeNum = (EditText) findViewById(R.id.et_barcodeNum);
-        et_barcodeNum.setFilters(new InputFilter[]{editFilter});
 
         btn_enter_number = (Button) findViewById(R.id.btn_enter_number);
         btn_enter_number.setOnClickListener(new View.OnClickListener() {
@@ -42,18 +41,4 @@ public class EnterNumber extends AppCompatActivity {
             }
         });
     }
-
-    protected InputFilter editFilter = new InputFilter() {
-        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-            Pattern pattern = Pattern.compile("^[0-9]*$");        // 숫자
-            // Pattern pattern = Pattern.compile("^[a-zA-Z]+$");        // 영문
-            // Pattern pattern = Pattern.compile("^[ㄱ-ㅎ가-힣]+$");        // 한글
-            // Pattern pattern = Pattern.compile("^[a-zA-Z0-9ㄱ-ㅎ가-힣]+$");        // 영문,숫자,한글
-            if(!pattern.matcher(source).matches()) {
-                Toast.makeText(getApplicationContext(), "숫자를 입력해주세요", Toast.LENGTH_SHORT).show();
-                return "";
-            }
-            return null;
-        }
-    };
 }

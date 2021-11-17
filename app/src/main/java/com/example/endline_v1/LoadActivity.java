@@ -1,10 +1,13 @@
 package com.example.endline_v1;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
@@ -38,6 +42,7 @@ import com.gun0912.tedpermission.TedPermission;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class LoadActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
@@ -80,54 +85,59 @@ public class LoadActivity extends AppCompatActivity implements GoogleApiClient.O
         btn_join.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                auth.createUserWithEmailAndPassword(et_email.getText().toString(), et_password.getText().toString()).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        e.printStackTrace();
-                        Toast.makeText(getApplicationContext(), "회원가입 실패", Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Log.d("createUser", "Uid => " + auth.getUid());
-                            Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                            finish();
-                        }else if(task.isCanceled()){
-                            Toast.makeText(getApplicationContext(), "사용자 회원가입 취소", Toast.LENGTH_SHORT).show();
+                boolean validate = validateUserInfo(et_email.getText().toString(), et_password.getText().toString());
+                if(validate){
+                    auth.createUserWithEmailAndPassword(et_email.getText().toString(), et_password.getText().toString()).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(), "회원가입 실패", Toast.LENGTH_SHORT).show();
                         }
-                    }
-                });
+                    }).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if(task.isSuccessful()){
+                                Log.d("createUser", "Uid => " + auth.getUid());
+                                Toast.makeText(getApplicationContext(), "환영합니다.", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(intent);
+                                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                                finish();
+                            }else if(task.isCanceled()){
+                                Toast.makeText(getApplicationContext(), "사용자 회원가입 취소", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
             }
         });
 
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                auth.signInWithEmailAndPassword(et_email.getText().toString(), et_password.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                            finish();
-                        }else if(task.isCanceled()){
-                            Toast.makeText(getApplicationContext(), "사용자 로그인 취소", Toast.LENGTH_SHORT).show();
+                boolean validate = validateUserInfo(et_email.getText().toString(), et_password.getText().toString());
+                if(validate){
+                    auth.signInWithEmailAndPassword(et_email.getText().toString(), et_password.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if(task.isSuccessful()){
+                                Toast.makeText(getApplicationContext(), "환영합니다.", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(intent);
+                                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                                finish();
+                            }else if(task.isCanceled()){
+                                Toast.makeText(getApplicationContext(), "사용자 로그인 취소", Toast.LENGTH_SHORT).show();
+                            }
                         }
-
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
-                    }
-                });
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                            e.printStackTrace();
+                        }
+                    });
+                }
             }
         });
 
@@ -176,6 +186,34 @@ public class LoadActivity extends AppCompatActivity implements GoogleApiClient.O
                 startActivityForResult(intent, REQ_SIGN_GOOGLE);
             }
         });
+
+        Intent intent = getIntent();
+        if(!(intent.hasExtra("signOut"))){
+            GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this);
+            if(googleSignInAccount != null){
+                firebaseAuthWithGoogle(googleSignInAccount);
+            }
+        }
+    }
+
+    private boolean validateUserInfo(String email, String password) {
+        Pattern pattern = Patterns.EMAIL_ADDRESS;
+        if(email == null){
+            Toast.makeText(this, "이메일을 입력하세요!", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(!(pattern.matcher(email).matches())){
+            Toast.makeText(this, "올바른 이메일 형식을 입력하세요!", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(password == null) {
+            Toast.makeText(this, "비밀번호을 입력하세요!", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(password.length() < 8){
+            Toast.makeText(this, "비밀번호는 8자리 이상입니다!", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        else{
+            return true;
+        }
     }
 
     private void toggleButton(boolean isNewAccount) {
@@ -208,6 +246,7 @@ public class LoadActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
+        ProgressDialog progressDialog = ProgressDialog.show(this, "로그인", "로그인 중입니다.", true);
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         auth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -215,6 +254,7 @@ public class LoadActivity extends AppCompatActivity implements GoogleApiClient.O
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
+                            progressDialog.dismiss();
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = auth.getCurrentUser();
                             Toast.makeText(getApplicationContext(), "환영합니다", Toast.LENGTH_SHORT).show();
@@ -223,7 +263,9 @@ public class LoadActivity extends AppCompatActivity implements GoogleApiClient.O
                             finish();
                         } else {
                             // If sign in fails, display a message to the user.
+                            progressDialog.dismiss();
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

@@ -7,12 +7,32 @@
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView_food"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:background="#E6FFF4">
 
-<!--    <TextView-->
+        <Spinner
+            android:id="@+id/spinner_filter_food"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:autofillHints="등록일자순"
+            android:entries="@array/filter_spinner_item"
+            android:padding="10dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_food"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/spinner_filter_food" />
+    </RelativeLayout>
+
+    <!--    <TextView-->
 <!--        android:id="@+id/text_food"-->
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="wrap_content"-->

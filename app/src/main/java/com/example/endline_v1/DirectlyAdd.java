@@ -28,6 +28,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -56,12 +57,15 @@ public class DirectlyAdd extends AppCompatActivity {
     private Spinner spinner;
     private Map<String, Object> data = new HashMap<>();
     private Calendar c = Calendar.getInstance();
+    private FirebaseUser user;
+    private FirebaseAuth auth;
     private FirebaseFirestore firestore;
     private CollectionReference collectionReference;
     private Query query;
     private FirebaseStorage storage;
     private StorageReference storageRef;
     private Uri imgUri;
+    private String imgUrl;
     private String randomKey;
     private Intent intent;
     private String barcode_number;
@@ -153,58 +157,25 @@ public class DirectlyAdd extends AppCompatActivity {
         btn_insertScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (imgUri != null) {
-                    randomKey = UUID.randomUUID().toString();
-                    storage = FirebaseStorage.getInstance();
-                    storageRef = storage.getReference("images/" + randomKey);
-
-                    storageRef.putFile(imgUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                            if(task.isSuccessful()){
-                                storageRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Uri> task) {
-                                        if(task.isSuccessful()){
-                                            FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-                                            FirebaseAuth user = FirebaseAuth.getInstance();
-                                            data.put("UID", user.getUid());
-                                            data.put("barcode", et_barcode.getText().toString().substring(9));
-                                            data.put("register_date", getTime());
-                                            data.put("product_name", et_product_name.getText().toString());
-                                            data.put("brand", et_brand.getText().toString());
-                                            data.put("img", task.getResult().toString());
-                                            data.put("category", et_category.getText().toString());
-                                            data.put("price", et_price.getText().toString());
-                                            data.put("buy_date", et_buyDay.getText().toString());
-                                            data.put("end_line", et_endline.getText().toString());
-                                            data.put("register_date", getTime());
-                                            data.put("use_state", "false");
-                                            firestore.collection("mainData").add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                                @Override
-                                                public void onSuccess(DocumentReference documentReference) {
-                                                    Log.d("Firestore 입력", "write data to firebase");
-                                                }
-                                            }).addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Log.w("firestore input", "write data fail");
-                                                }
-                                            });
-                                            finish();
-                                            Toast.makeText(getApplicationContext(), "입력 완료", Toast.LENGTH_SHORT).show();
-                                        }else{
-                                            Log.w("put Img", "fail");
-                                        }
-                                    }
-                                });
-                            }else{
-                                Log.w("put Img", "fail");
-                            }
+                boolean validate = ValidateData(
+                        et_barcode.getText().toString(),
+                        et_brand.getText().toString(),
+                        et_buyDay.getText().toString(),
+                        et_endline.getText().toString(),
+                        et_category.getText().toString(),
+                        et_product_name.getText().toString(),
+                        et_price.getText().toString()
+                );
+                if(validate){
+                    if (imgUri != null || imgUrl != null) {
+                        if(imgUrl != null){
+                            InsertDataWithUrl(imgUrl);
+                        }else{
+                            InsertDataWithUri(imgUri);
                         }
-                    });
-                }else{
-                    Toast.makeText(getApplicationContext(), "이미지를 선택해주세요.", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(getApplicationContext(), "이미지를 선택해주세요.", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -225,6 +196,126 @@ public class DirectlyAdd extends AppCompatActivity {
         }
     }
 
+    private boolean ValidateData(
+            String barcode, String brand, String buyDay, String endline, String category, String product_name, String price) {
+        if(barcode.isEmpty()) {
+            Toast.makeText(this, "물품 정보를 입력하세요!", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(brand.isEmpty()){
+            Toast.makeText(this, "물품 정보를 입력하세요!", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(buyDay.isEmpty()){
+            Toast.makeText(this, "물품 정보를 입력하세요!", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(endline.isEmpty()){
+            Toast.makeText(this, "물품 정보를 입력하세요!", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(category.isEmpty()){
+            Toast.makeText(this, "물품 정보를 입력하세요!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if(category.equals("카테고리")) {
+            Toast.makeText(this, "카테고리를 선택하세요!", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(product_name.isEmpty()){
+            Toast.makeText(this, "물품 정보를 입력하세요!", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(price.isEmpty()){
+            Toast.makeText(this, "물품 정보를 입력하세요!", Toast.LENGTH_SHORT).show();
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    private void InsertDataWithUrl(String imgurl) {
+        firestore = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+
+        data.put("UID", user.getUid());
+        data.put("barcode", et_barcode.getText().toString());
+        data.put("register_date", getTime());
+        data.put("product_name", et_product_name.getText().toString());
+        data.put("brand", et_brand.getText().toString());
+        data.put("img", imgurl);
+        data.put("category", et_category.getText().toString());
+        data.put("price", et_price.getText().toString());
+        data.put("buy_date", et_buyDay.getText().toString());
+        data.put("end_line", et_endline.getText().toString());
+        data.put("use_state", "false");
+        firestore.collection("mainData").add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                Log.d("Firestore 입력", "write data to firebase");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("firestore input", "write data fail");
+            }
+        });
+        finish();
+        Toast.makeText(getApplicationContext(), "입력 완료", Toast.LENGTH_SHORT).show();
+
+        data.clear();
+    }
+
+    private void InsertDataWithUri(Uri imgUri) {
+        randomKey = UUID.randomUUID().toString();
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference("images/" + randomKey);
+
+        storageRef.putFile(imgUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                if(task.isSuccessful()){
+                    storageRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            if(task.isSuccessful()){
+                                firestore = FirebaseFirestore.getInstance();
+                                auth = FirebaseAuth.getInstance();
+                                user = auth.getCurrentUser();
+
+                                data.put("UID", user.getUid());
+                                data.put("barcode", et_barcode.getText().toString());
+                                data.put("register_date", getTime());
+                                data.put("product_name", et_product_name.getText().toString());
+                                data.put("brand", et_brand.getText().toString());
+                                data.put("img", task.getResult().toString());
+                                data.put("category", et_category.getText().toString());
+                                data.put("price", et_price.getText().toString());
+                                data.put("buy_date", et_buyDay.getText().toString());
+                                data.put("end_line", et_endline.getText().toString());
+                                data.put("use_state", "false");
+                                firestore.collection("mainData").add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    @Override
+                                    public void onSuccess(DocumentReference documentReference) {
+                                        Log.d("Firestore 입력", "write data to firebase");
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w("firestore input", "write data fail");
+                                    }
+                                });
+                                finish();
+                                Toast.makeText(getApplicationContext(), "입력 완료", Toast.LENGTH_SHORT).show();
+
+                                data.clear();
+                            }else{
+                                Log.w("put Img", "fail");
+                            }
+                        }
+                    });
+                }else{
+                    Log.w("put Img", "fail");
+                }
+            }
+        });
+    }
+
     private void getDataFormFirebase(String barcode_number) {
         firestore = FirebaseFirestore.getInstance();
         collectionReference = firestore.collection("mainData");
@@ -236,8 +327,11 @@ public class DirectlyAdd extends AppCompatActivity {
                     for (QueryDocumentSnapshot document : task.getResult()){
                         Uri uri = Uri.parse(document.get("img").toString());
                         Glide.with(getApplicationContext()).load(uri).into(ibtn_selectPhoto);
+                        imgUrl = document.get("img").toString();
                         et_brand.setText(document.get("brand").toString());
                         et_category.setText(document.get("category").toString());
+                        et_category.setVisibility(View.VISIBLE);
+                        spinner.setVisibility(View.GONE);
                         et_product_name.setText(document.get("product_name").toString());
                         et_price.setText(document.get("price").toString());
                     }

@@ -5,7 +5,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +25,9 @@ public class FoodFragment extends Fragment {
     private FoodViewModel foodViewModel;
     private RecyclerView recyclerView;
     private Activity activity;
+    private DisplayDataFromFirebase displayer;
+    private Spinner spinner_filter_food;
+    private String filter_index;
 
     @Override
     public void onAttach(@NonNull Activity activity) {
@@ -34,16 +40,25 @@ public class FoodFragment extends Fragment {
         foodViewModel =
                 new ViewModelProvider(this).get(FoodViewModel.class);
         View root = inflater.inflate(R.layout.fragment_food, container, false);
-//        final TextView textView = root.findViewById(R.id.text_food);
-//        foodViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
+
+        spinner_filter_food = (Spinner) root.findViewById(R.id.spinner_filter_food);
+        spinner_filter_food.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                filter_index = parent.getItemAtPosition(position).toString();
+                displayer = new DisplayDataFromFirebase("식품", filter_index, recyclerView, activity.getApplicationContext());
+                displayer.DisplayData();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                spinner_filter_food.setSelection(0);
+                filter_index = "등록일자순";
+            }
+        });
 
         recyclerView = (RecyclerView) root.findViewById(R.id.recyclerView_food);
-        DisplayDataFromFirebase displayer = new DisplayDataFromFirebase("식품", recyclerView, activity.getApplicationContext());
+        displayer = new DisplayDataFromFirebase("식품", recyclerView, activity.getApplicationContext());
         displayer.DisplayData();
 
         return root;

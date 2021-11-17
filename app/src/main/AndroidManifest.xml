@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.endline_v1">
     <!-- Related Internet Permission -->
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
@@ -48,7 +49,9 @@
         <activity
             android:name=".MainActivity"
             android:theme="@style/Theme.EndLine_v1.NoActionBar" />
-
+        <activity android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="fullSensor"
+            tools:replace="screenOrientation"/>
         <service android:name=".FirebaseInstanceServices">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
@@ -70,6 +73,9 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/white" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

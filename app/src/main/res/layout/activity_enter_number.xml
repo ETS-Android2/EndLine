@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#E6FFF4"
     tools:context=".EnterNumber">
 
     <LinearLayout
@@ -45,7 +46,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
+            android:digits="0123456789"
             android:hint=" 바코드 번호를 입력해주세요."
+            android:inputType="number"
+            android:maxLength="13"
             android:textSize="20dp" />
 
         <Button
@@ -56,6 +60,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginRight="5dp"
             android:text="등록"
+            android:textColor="@color/white"
             android:textSize="20dp"
             android:textStyle="bold" />
 

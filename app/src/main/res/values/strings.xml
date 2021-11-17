@@ -13,6 +13,7 @@
 
     <!-- Add Custom Menu-->
     <string name="menu_profile">Profile</string>
+    <string name="menu_all">All</string>
     <string name="menu_barcode_scan">Barcode Scan</string>
     <string name="menu_enter_number">Enter Number</string>
     <string name="menu_directly_add">Directly Add</string>

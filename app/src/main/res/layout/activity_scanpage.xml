@@ -9,6 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#E6FFF4"
         android:orientation="vertical"
         android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -42,7 +43,8 @@
             android:layout_weight="1"
             android:drawableLeft="@drawable/ic_baseline_drive_file_rename_outline_24"
             android:drawablePadding="10dp"
-            android:hint="제품명" />
+            android:hint="제품명"
+            android:maxLength="25" />
 
         <EditText
             android:id="@+id/et_brand"
@@ -51,7 +53,8 @@
             android:layout_weight="1"
             android:drawableLeft="@drawable/ic_baseline_house_24"
             android:drawablePadding="10dp"
-            android:hint="제조사" />
+            android:hint="제조사"
+            android:maxLength="25" />
 
         <Spinner
             android:id="@+id/spinner"
@@ -60,12 +63,16 @@
             android:layout_weight="1"
             android:autofillHints="카테고리"
             android:background="@drawable/style_bottom_border"
-            android:entries="@array/spiner_item" />
+            android:entries="@array/scan_spinner_item" />
 
         <EditText
             android:id="@+id/et_category"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/ic_baseline_category_24"
+            android:drawablePadding="10dp"
+            android:enabled="false"
             android:hint="카테고리"
             android:visibility="gone" />
 
@@ -74,9 +81,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:digits="0123456789"
             android:drawableLeft="@drawable/ic_baseline_monetization_on_24"
             android:drawablePadding="10dp"
-            android:hint="가격" />
+            android:hint="가격"
+            android:inputType="number"
+            android:maxLength="25" />
 
         <LinearLayout
             android:layout_width="match_parent"

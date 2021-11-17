@@ -107,6 +107,7 @@ public class ProfileFragment extends Fragment implements FirebaseAuth.AuthStateL
     public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
         if(firebaseAuth.getCurrentUser() == null){
             Intent intent = new Intent(mainActivity.getApplicationContext(), LoadActivity.class);
+            intent.putExtra("signOut", "True");
             startActivity(intent);
             onDetach();
             Log.d("USER", "Log out state");

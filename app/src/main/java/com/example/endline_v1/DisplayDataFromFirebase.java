@@ -1,5 +1,6 @@
 package com.example.endline_v1;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
@@ -31,7 +32,7 @@ public class DisplayDataFromFirebase {
     private ArrayList<ItemDataSet> list;
     private RecyclerView recyclerView;
     private ItemRecyclerAdapter adapter;
-    private String category, product_name;
+    private String category, product_name, filter_index, uid;
 
     public DisplayDataFromFirebase(String category,RecyclerView recyclerView, Context context) {
         this.recyclerView = recyclerView;
@@ -46,9 +47,36 @@ public class DisplayDataFromFirebase {
         this.product_name = product_name;
     }
 
+    public DisplayDataFromFirebase(String category, String filter_index, RecyclerView recyclerView, Context context){
+        this.recyclerView = recyclerView;
+        this.context = context;
+        this.category = category;
+        switch (filter_index){
+            case "등록일자순":
+                this.filter_index = "register_date";
+                break;
+            case "구매일자순":
+                this.filter_index = "buy_date";
+                break;
+            case "유통기한순":
+                this.filter_index = "end_line";
+                break;
+            case "사용여부순":
+                this.filter_index = "use_state";
+                break;
+            case "가격순":
+                this.filter_index = "price";
+                break;
+            default:
+                this.filter_index = null;
+                break;
+        }
+    }
+
     public void DisplayData(){
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
+        uid = user.getUid();
         firestore = FirebaseFirestore.getInstance();
         collectionReference = firestore.collection("mainData");
 
@@ -62,19 +90,31 @@ public class DisplayDataFromFirebase {
     private void getData() {
         Log.d("UID", user.getUid());
         if(category == "All"){
-            query = collectionReference.whereEqualTo("UID", user.getUid());
+            if(filter_index == null){
+                query = collectionReference.whereEqualTo("UID", uid);
+            }else{
+                query = collectionReference.whereEqualTo("UID", uid).orderBy(filter_index, Query.Direction.ASCENDING);
+            }
         }else if(category == "search"){
-            query = collectionReference.whereEqualTo("UID", user.getUid()).whereEqualTo("product_name", product_name);
+            query = collectionReference.whereEqualTo("UID", uid).whereEqualTo("product_name", product_name);
         }
         else{
-            query = collectionReference.whereEqualTo("category", category).whereEqualTo("UID", user.getUid());
+            if(filter_index == null){
+                query = collectionReference.whereEqualTo("UID", uid).whereEqualTo("category", category);
+            }else{
+                query = collectionReference
+                            .whereEqualTo("UID", uid)
+                            .whereEqualTo("category", category)
+                            .orderBy(filter_index, Query.Direction.ASCENDING);
+            }
         }
+        list.clear();
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){
                     for (QueryDocumentSnapshot document : task.getResult()){
-                        if(document.get("product_name") != null){
+                        if(document.exists()){
                             Log.d("getData", document.getData().toString());
                             ItemDataSet itemDataSet = new ItemDataSet(
                                     document.get("product_name").toString(),
@@ -89,10 +129,9 @@ public class DisplayDataFromFirebase {
                             Log.w("getData", "No Data in uid");
                             Toast.makeText(context, "아직 데이터가 없습니다!", Toast.LENGTH_LONG).show();
                         }
-
                     }
                 }else{
-                    Log.w("getData", "fail");
+                    Log.w("getData", task.getResult().toString());
                     Toast.makeText(context, "데이터 로딩 실패\n다시 시도해 보세요", Toast.LENGTH_LONG).show();
                 }
             }
