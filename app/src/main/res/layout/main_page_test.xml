@@ -9,6 +9,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#E6FFF4"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -64,15 +65,16 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:background="@drawable/all_main"
                         android:padding="10dp">
 
                         <ImageView
                             android:id="@+id/imageView2"
-                            android:layout_width="75dp"
-                            android:layout_height="75dp"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
                             android:layout_centerHorizontal="false"
                             android:layout_centerVertical="true"
-                            app:srcCompat="@drawable/all" />
+                            app:srcCompat="@drawable/all_test" />
 
                         <TextView
                             android:id="@+id/textView"
@@ -115,15 +117,16 @@
 
                         <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                            android:layout_height="match_parent"
+                            android:background="@drawable/health_main">
 
                             <ImageView
                                 android:id="@+id/imageView5"
-                                android:layout_width="75dp"
-                                android:layout_height="75dp"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
                                 android:layout_centerInParent="true"
                                 android:layout_centerHorizontal="true"
-                                app:srcCompat="@drawable/health" />
+                                app:srcCompat="@drawable/health_test" />
 
                             <TextView
                                 android:id="@+id/textView4"
@@ -150,14 +153,15 @@
 
                         <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                            android:layout_height="match_parent"
+                            android:background="@drawable/food_main">
 
                             <ImageView
                                 android:id="@+id/imageView7"
-                                android:layout_width="75dp"
-                                android:layout_height="75dp"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
                                 android:layout_centerInParent="true"
-                                app:srcCompat="@drawable/food" />
+                                app:srcCompat="@drawable/food_test" />
 
                             <TextView
                                 android:id="@+id/textView5"
@@ -191,14 +195,15 @@
 
                         <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                            android:layout_height="match_parent"
+                            android:background="@drawable/beauty_main">
 
                             <ImageView
                                 android:id="@+id/imageView6"
-                                android:layout_width="75dp"
-                                android:layout_height="75dp"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
                                 android:layout_centerInParent="true"
-                                app:srcCompat="@drawable/beauty" />
+                                app:srcCompat="@drawable/beauty_test" />
 
                             <TextView
                                 android:id="@+id/textView2"
@@ -225,14 +230,15 @@
 
                         <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                            android:layout_height="match_parent"
+                            android:background="@drawable/medical_main">
 
                             <ImageView
                                 android:id="@+id/imageView8"
-                                android:layout_width="75dp"
-                                android:layout_height="75dp"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
                                 android:layout_centerInParent="true"
-                                app:srcCompat="@drawable/medical" />
+                                app:srcCompat="@drawable/medical_test" />
 
                             <TextView
                                 android:id="@+id/textView6"

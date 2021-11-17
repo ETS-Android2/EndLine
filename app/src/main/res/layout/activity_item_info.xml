@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#E6FFF4"
     tools:context=".ItemInfo">
 
     <LinearLayout
@@ -34,17 +34,17 @@
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
-                    <ImageView
-                        android:id="@+id/iv_info_img"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="fitXY"
-                        android:layout_weight="1"
-                        android:padding="5dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        tools:srcCompat="@tools:sample/avatars" />
+                <ImageView
+                    android:id="@+id/iv_info_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    android:scaleType="fitXY"
+                    tools:srcCompat="@tools:sample/avatars" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -60,21 +60,21 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:enabled="false"
-                        android:textColor="@color/black"
                         android:background="@color/fui_transparent"
+                        android:enabled="false"
                         android:text="Apple"
+                        android:textColor="@color/black"
                         android:textSize="30dp"
                         android:textStyle="bold" />
 
-                        <TextView
-                            android:id="@+id/tv_info_category"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textAlignment="viewEnd"
-                            android:text="식품"
-                            android:textSize="17dp"
-                            android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/tv_info_category"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="식품"
+                        android:textAlignment="viewEnd"
+                        android:textSize="17dp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tv_info_register_Day"
@@ -91,9 +91,9 @@
                         android:layout_height="match_parent"
                         android:layout_marginTop="5dp"
                         android:layout_weight="1.3"
+                        android:text="사용 여부"
                         android:textOff="미사용"
-                        android:textOn="사용"
-                        android:text="사용 여부" />
+                        android:textOn="사용" />
 
                 </LinearLayout>
 
@@ -182,9 +182,9 @@
                         android:layout_weight="1"
                         android:background="@color/white"
                         android:enabled="false"
-                        android:textColor="#7C7C7C"
                         android:padding="10dp"
                         android:text="1000원"
+                        android:textColor="#7C7C7C"
                         android:textSize="20dp" />
                 </TableRow>
 
@@ -207,10 +207,10 @@
                         android:layout_marginBottom="1dp"
                         android:layout_weight="1"
                         android:background="@color/white"
-                        android:textColor="#7C7C7C"
                         android:enabled="false"
                         android:padding="10dp"
                         android:text="2021년 11월 5일"
+                        android:textColor="#7C7C7C"
                         android:textSize="20dp" />
                 </TableRow>
 
@@ -233,10 +233,10 @@
                         android:layout_marginBottom="1dp"
                         android:layout_weight="1"
                         android:background="@color/white"
-                        android:textColor="#7C7C7C"
                         android:enabled="false"
                         android:padding="10dp"
                         android:text="2021년 11월 30일"
+                        android:textColor="#7C7C7C"
                         android:textSize="20dp" />
                 </TableRow>
 
