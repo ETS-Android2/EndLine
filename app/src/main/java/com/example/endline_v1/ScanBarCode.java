@@ -163,10 +163,21 @@ public class ScanBarCode extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (imgUri != null || imgUrl != null) {
-                    if(imgUrl != null){
-                        InsertDataWithUrl(imgUrl);
-                    }else{
-                        InsertDataWithUri(imgUri);
+                    boolean validate = ValidateData(
+                            et_barcode.getText().toString(),
+                            et_brand.getText().toString(),
+                            et_buyDay.getText().toString(),
+                            et_endline.getText().toString(),
+                            et_category.getText().toString(),
+                            et_product_name.getText().toString(),
+                            et_price.getText().toString()
+                    );
+                    if(validate){
+                        if(imgUrl != null){
+                            InsertDataWithUrl(imgUrl);
+                        }else{
+                            InsertDataWithUri(imgUri);
+                        }
                     }
                 }else{
                     Toast.makeText(getApplicationContext(), "이미지를 선택해주세요.", Toast.LENGTH_SHORT).show();
@@ -185,13 +196,45 @@ public class ScanBarCode extends AppCompatActivity {
         new IntentIntegrator(this).initiateScan();
     }
 
+    private boolean ValidateData(
+            String barcode, String brand, String buyDay, String endline, String category, String product_name, String price) {
+        if(barcode.isEmpty()) {
+            Toast.makeText(this, "물품 정보를 입력하세요!", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(brand.isEmpty()){
+            Toast.makeText(this, "물품 정보를 입력하세요!", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(buyDay.isEmpty()){
+            Toast.makeText(this, "물품 정보를 입력하세요!", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(endline.isEmpty()){
+            Toast.makeText(this, "물품 정보를 입력하세요!", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(category.isEmpty()){
+            Toast.makeText(this, "물품 정보를 입력하세요!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if(category.equals("카테고리")) {
+            Toast.makeText(this, "카테고리를 선택하세요!", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(product_name.isEmpty()){
+            Toast.makeText(this, "물품 정보를 입력하세요!", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(price.isEmpty()){
+            Toast.makeText(this, "물품 정보를 입력하세요!", Toast.LENGTH_SHORT).show();
+            return false;
+        }else{
+            return true;
+        }
+    }
+
     private void InsertDataWithUrl(String imgurl) {
         firestore = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
 
         data.put("UID", user.getUid());
-        data.put("barcode", et_barcode.getText().toString().substring(9));
+        data.put("barcode", et_barcode.getText().toString());
         data.put("register_date", getTime());
         data.put("product_name", et_product_name.getText().toString());
         data.put("brand", et_brand.getText().toString());
@@ -200,7 +243,6 @@ public class ScanBarCode extends AppCompatActivity {
         data.put("price", et_price.getText().toString());
         data.put("buy_date", et_buyDay.getText().toString());
         data.put("end_line", et_endline.getText().toString());
-        data.put("register_date", getTime());
         data.put("use_state", "false");
         firestore.collection("mainData").add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
@@ -237,7 +279,7 @@ public class ScanBarCode extends AppCompatActivity {
                                 user = auth.getCurrentUser();
 
                                 data.put("UID", user.getUid());
-                                data.put("barcode", et_barcode.getText().toString().substring(9));
+                                data.put("barcode", et_barcode.getText().toString());
                                 data.put("register_date", getTime());
                                 data.put("product_name", et_product_name.getText().toString());
                                 data.put("brand", et_brand.getText().toString());
@@ -289,7 +331,7 @@ public class ScanBarCode extends AppCompatActivity {
         switch (requestCode){
             case IntentIntegrator.REQUEST_CODE:
                 IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-                et_barcode.setText("바코드 번호 : " + result.getContents());
+                et_barcode.setText(result.getContents());
                 getDataFormFirebase(result.getContents());
                 break;
             case REQ_SELECT_PHOTO:
@@ -323,6 +365,8 @@ public class ScanBarCode extends AppCompatActivity {
                         imgUrl = document.get("img").toString();
                         et_brand.setText(document.get("brand").toString());
                         et_category.setText(document.get("category").toString());
+                        et_category.setVisibility(View.VISIBLE);
+                        spinner.setVisibility(View.GONE);
                         et_product_name.setText(document.get("product_name").toString());
                         et_price.setText(document.get("price").toString());
                     }
