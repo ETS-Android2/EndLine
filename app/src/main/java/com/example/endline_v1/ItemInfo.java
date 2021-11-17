@@ -100,7 +100,7 @@ public class ItemInfo extends AppCompatActivity {
 
     private void updateUseState(boolean isChecked, String docId) {
         if(docId != null){
-            firestore.document("mainData/" + docId).update("use", isChecked + "").addOnCompleteListener(new OnCompleteListener<Void>() {
+            firestore.document("mainData/" + docId).update("use_state", isChecked + "").addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful()){
@@ -203,7 +203,7 @@ public class ItemInfo extends AppCompatActivity {
         Uri uri = Uri.parse(document.get("img").toString());
         Glide.with(this).load(uri).into(iv_info_img);
 
-        if(document.get("use_state").toString() == "false"){
+        if(document.get("use_state").equals("true")){
             toggleButton.setChecked(true);
         }else{
             toggleButton.setChecked(false);
