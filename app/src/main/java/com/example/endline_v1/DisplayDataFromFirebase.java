@@ -31,7 +31,7 @@ public class DisplayDataFromFirebase {
     private ArrayList<ItemDataSet> list;
     private RecyclerView recyclerView;
     private ItemRecyclerAdapter adapter;
-    private String category, product_name;
+    private String category, product_name, filter_index;
 
     public DisplayDataFromFirebase(String category,RecyclerView recyclerView, Context context) {
         this.recyclerView = recyclerView;
@@ -44,6 +44,29 @@ public class DisplayDataFromFirebase {
         this.context = context;
         this.category = category;
         this.product_name = product_name;
+    }
+
+    public DisplayDataFromFirebase(String category, String filter_index, RecyclerView recyclerView, Context context){
+        this.recyclerView = recyclerView;
+        this.context = context;
+        this.category = category;
+        switch (filter_index){
+            case "등록일자순":
+                this.filter_index = "register_date";
+                break;
+            case "구매일자순":
+                this.filter_index = "buy_date";
+                break;
+            case "유통기한순":
+                this.filter_index = "end_line";
+                break;
+            case "사용여부순":
+                this.filter_index = "use_state";
+                break;
+            case "가격순":
+                this.filter_index = "price";
+                break;
+        }
     }
 
     public void DisplayData(){
@@ -62,7 +85,11 @@ public class DisplayDataFromFirebase {
     private void getData() {
         Log.d("UID", user.getUid());
         if(category == "All"){
-            query = collectionReference.whereEqualTo("UID", user.getUid());
+            if(filter_index == null){
+                query = collectionReference.whereEqualTo("UID", user.getUid());
+            }else{
+                query = collectionReference.whereEqualTo("UID", user.getUid()).orderBy(this.filter_index, Query.Direction.ASCENDING);
+            }
         }else if(category == "search"){
             query = collectionReference.whereEqualTo("UID", user.getUid()).whereEqualTo("product_name", product_name);
         }

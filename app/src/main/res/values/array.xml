@@ -12,6 +12,7 @@
         <item>등록일자순</item>
         <item>구매일자순</item>
         <item>유통기한순</item>
+        <item>사용여부순</item>
         <item>가격순</item>
     </string-array>
 </resources>
