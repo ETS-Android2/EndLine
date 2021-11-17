@@ -43,7 +43,6 @@ public class HealthFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 filter_index = parent.getItemAtPosition(position).toString();
-                Toast.makeText(activity.getApplicationContext(), filter_index, Toast.LENGTH_SHORT).show();
                 displayer = new DisplayDataFromFirebase("건강", filter_index, recyclerView, activity.getApplicationContext());
                 displayer.DisplayData();
             }

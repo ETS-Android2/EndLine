@@ -37,20 +37,12 @@ public class AllFragment extends Fragment {
         allViewModel =
                 new ViewModelProvider(this).get(AllViewModel.class);
         View root = inflater.inflate(R.layout.fragment_all, container, false);
-//        final TextView textView = root.findViewById(R.id.text_home);
-//        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
 
         spinner_filter_all = (Spinner) root.findViewById(R.id.spinner_filter_all);
         spinner_filter_all.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 filter_index = parent.getItemAtPosition(position).toString();
-                Toast.makeText(activity.getApplicationContext(), filter_index, Toast.LENGTH_SHORT).show();
                 displayer = new DisplayDataFromFirebase("All", filter_index, recyclerView, activity.getApplicationContext());
                 displayer.DisplayData();
             }
