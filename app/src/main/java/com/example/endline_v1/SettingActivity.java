@@ -29,31 +29,31 @@ public class SettingActivity extends AppCompatActivity {
         actionBar.setTitle("알림");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        list = new ArrayList<>();
-        adapter = new SettingRecyclerAdapter(list);
-        recyclerView.setAdapter(adapter);
-
-        btn_add = (Button) findViewById(R.id.btn_itemadd);
-        btn_clear = (Button) findViewById(R.id.btn_itemdel);
-
-        btn_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DataSet data = new DataSet("유통기한 임박 확인!!!");
-                list.add(data);
-                adapter.notifyDataSetChanged();
-            }
-        });
-
-        btn_clear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                list.clear();
-                adapter.notifyDataSetChanged();
-            }
-        });
+//        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        list = new ArrayList<>();
+//        adapter = new SettingRecyclerAdapter(list);
+//        recyclerView.setAdapter(adapter);
+//
+//        btn_add = (Button) findViewById(R.id.btn_itemadd);
+//        btn_clear = (Button) findViewById(R.id.btn_itemdel);
+//
+//        btn_add.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                DataSet data = new DataSet("유통기한 임박 확인!!!");
+//                list.add(data);
+//                adapter.notifyDataSetChanged();
+//            }
+//        });
+//
+//        btn_clear.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                list.clear();
+//                adapter.notifyDataSetChanged();
+//            }
+//        });
 
     }
 

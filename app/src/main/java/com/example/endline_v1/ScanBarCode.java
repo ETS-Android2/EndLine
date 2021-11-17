@@ -193,7 +193,11 @@ public class ScanBarCode extends AppCompatActivity {
             }
         });
 
-        new IntentIntegrator(this).initiateScan();
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setOrientationLocked(false);
+        integrator.setBeepEnabled(false);
+        integrator.setPrompt("바코드를 찍어주세요!");
+        integrator.initiateScan();
     }
 
     private boolean ValidateData(

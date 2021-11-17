@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="spiner_item">
+    <string-array name="scan_spinner_item">
         <item>카테고리</item>
         <item>식품</item>
         <item>화장품</item>
         <item>건강</item>
         <item>의약품</item>
+    </string-array>
+
+    <string-array name="filter_spinner_item">
+        <item>등록일자순</item>
+        <item>구매일자순</item>
+        <item>유통기한순</item>
+        <item>가격순</item>
     </string-array>
 </resources>
