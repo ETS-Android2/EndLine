@@ -95,7 +95,7 @@
 
 ## 10. Release
 
-> v1.2 stable
+> v1.2 stable - <a href="https://github.com/Enterprise09/EndLine/blob/master/app/release/app-release.apk">APK Download</a>
 
     ver.1 (2021-09-20)
         early develop version
