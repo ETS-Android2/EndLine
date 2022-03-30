@@ -1,4 +1,4 @@
-package com.example.endline_v1;
+package com.example.endline_v1.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -12,6 +12,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.SearchView;
+
+import com.example.endline_v1.R;
+import com.example.endline_v1.dto.ItemDataSet;
+import com.example.endline_v1.util.DisplayDataFromFirebase;
+import com.example.endline_v1.util.ItemRecyclerAdapter;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.example.endline_v1;
+package com.example.endline_v1.util;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +7,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.endline_v1.R;
+import com.example.endline_v1.dto.DataSet;
 
 import java.util.ArrayList;
 

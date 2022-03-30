@@ -1,4 +1,4 @@
-package com.example.endline_v1;
+package com.example.endline_v1.util;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,13 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.endline_v1.activity.ItemInfo;
+import com.example.endline_v1.R;
+import com.example.endline_v1.dto.ItemDataSet;
 
 import java.util.ArrayList;
 

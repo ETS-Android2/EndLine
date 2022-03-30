@@ -2,7 +2,6 @@ package com.example.endline_v1.ui.login;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,9 +20,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.annotation.GlideModule;
-import com.example.endline_v1.LoadActivity;
-import com.example.endline_v1.MainActivity;
+import com.example.endline_v1.activity.LoadActivity;
+import com.example.endline_v1.activity.MainActivity;
 import com.example.endline_v1.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

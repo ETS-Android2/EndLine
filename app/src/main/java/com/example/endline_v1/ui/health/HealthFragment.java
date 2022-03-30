@@ -7,14 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.endline_v1.DisplayDataFromFirebase;
+import com.example.endline_v1.util.DisplayDataFromFirebase;
 import com.example.endline_v1.R;
 
 public class HealthFragment extends Fragment {

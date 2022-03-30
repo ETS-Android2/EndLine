@@ -1,18 +1,15 @@
-package com.example.endline_v1;
+package com.example.endline_v1.activity;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputFilter;
-import android.text.Spanned;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import java.util.regex.Pattern;
+import com.example.endline_v1.R;
 
 public class EnterNumber extends AppCompatActivity {
 

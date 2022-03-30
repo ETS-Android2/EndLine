@@ -1,4 +1,4 @@
-package com.example.endline_v1;
+package com.example.endline_v1.util;
 
 import android.os.AsyncTask;
 import android.util.Log;

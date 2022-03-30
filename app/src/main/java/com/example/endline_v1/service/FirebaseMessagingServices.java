@@ -1,4 +1,4 @@
-package com.example.endline_v1;
+package com.example.endline_v1.service;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -6,7 +6,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
@@ -15,10 +14,10 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
+import com.example.endline_v1.R;
+import com.example.endline_v1.activity.SettingActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-
-import java.io.IOException;
 
 public class FirebaseMessagingServices extends FirebaseMessagingService {
 

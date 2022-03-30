@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -14,8 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.endline_v1.DisplayDataFromFirebase;
-import com.example.endline_v1.MainActivity;
+import com.example.endline_v1.util.DisplayDataFromFirebase;
 import com.example.endline_v1.R;
 import com.example.endline_v1.ui.all.AllFragment;
 import com.example.endline_v1.ui.beauty.BeautyFragment;
